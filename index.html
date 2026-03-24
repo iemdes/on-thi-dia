@@ -1,0 +1,1647 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Địa Lý 12 — Ôn Thi</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=Fraunces:ital,opsz,wght@0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0c12;
+  --surface: #12151f;
+  --card: #181c2a;
+  --card2: #1e2338;
+  --border: #252a40;
+  --border2: #2f3550;
+  --text: #e8ecf8;
+  --muted: #6b748f;
+  --dim: #3d4460;
+
+  --emerald: #10d48a;
+  --emerald-bg: rgba(16,212,138,.1);
+  --emerald-border: rgba(16,212,138,.25);
+  --rose: #f43f5e;
+  --rose-bg: rgba(244,63,94,.1);
+  --rose-border: rgba(244,63,94,.25);
+  --amber: #f59e0b;
+  --amber-bg: rgba(245,158,11,.1);
+  --amber-border: rgba(245,158,11,.25);
+  --sky: #38bdf8;
+  --sky-bg: rgba(56,189,248,.1);
+  --sky-border: rgba(56,189,248,.25);
+  --violet: #8b5cf6;
+  --violet-bg: rgba(139,92,246,.1);
+  --violet-border: rgba(139,92,246,.25);
+
+  --grad: linear-gradient(135deg, #10d48a, #38bdf8);
+  --grad-warm: linear-gradient(135deg, #f43f5e, #f59e0b);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Be Vietnam Pro', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── NOISE TEXTURE OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity: 0.4;
+}
+
+/* ── BG GLOWS ── */
+.bg-glow {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(80px);
+  opacity: 0.12;
+}
+.bg-glow-1 { width: 600px; height: 600px; background: var(--emerald); top: -200px; right: -150px; }
+.bg-glow-2 { width: 500px; height: 500px; background: var(--violet); bottom: -150px; left: -100px; }
+
+/* ── HEADER ── */
+.hdr {
+  position: sticky; top: 0; z-index: 200;
+  background: rgba(10,12,18,.9);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 20px;
+  height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+.logo {
+  display: flex; align-items: center; gap: 10px;
+}
+.logo-mark {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: var(--grad);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  box-shadow: 0 0 20px rgba(16,212,138,.3);
+}
+.logo-text {
+  font-family: 'Fraunces', serif;
+  font-size: 16px; font-weight: 700;
+  letter-spacing: -0.3px;
+}
+.logo-text span { color: var(--emerald); }
+
+.hdr-right { display: flex; align-items: center; gap: 8px; }
+
+.user-pill {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 5px 14px 5px 7px;
+}
+.user-av {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--grad);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 800;
+  color: #fff;
+}
+.user-name { font-size: 13px; font-weight: 700; }
+
+.btn-out {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 12px;
+  color: var(--muted);
+  font-family: inherit; font-size: 12px; font-weight: 600;
+  cursor: pointer; transition: .2s;
+}
+.btn-out:hover { border-color: var(--rose); color: var(--rose); }
+
+/* ── WRAP ── */
+.wrap { max-width: 780px; margin: 0 auto; padding: 28px 16px 140px; position: relative; z-index: 1; }
+
+/* ── SCREEN SYSTEM ── */
+.screen { display: none; }
+.screen.active { display: block; animation: fadeSlide .28s ease; }
+@keyframes fadeSlide {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── LOGIN ── */
+.login-page {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  padding: 20px; position: relative; z-index: 1;
+}
+.login-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  padding: 48px 40px;
+  max-width: 420px; width: 100%;
+  text-align: center;
+  box-shadow: 0 40px 80px rgba(0,0,0,.4);
+}
+@media(max-width:460px) { .login-box { padding: 32px 22px; } }
+.login-icon {
+  width: 72px; height: 72px; border-radius: 20px;
+  background: var(--grad);
+  margin: 0 auto 22px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 30px;
+  box-shadow: 0 0 40px rgba(16,212,138,.25);
+}
+.login-box h2 {
+  font-family: 'Fraunces', serif;
+  font-size: 28px; font-weight: 700;
+  margin-bottom: 8px; letter-spacing: -0.5px;
+}
+.login-box p { color: var(--muted); font-size: 13px; margin-bottom: 30px; line-height: 1.65; }
+.field-lbl {
+  text-align: left;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 1.8px; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 8px; display: block;
+}
+.inp {
+  width: 100%;
+  background: var(--card2);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 13px 16px;
+  color: var(--text);
+  font-family: inherit; font-size: 15px; font-weight: 600;
+  outline: none; transition: .2s; display: block; margin-bottom: 8px;
+}
+.inp:focus { border-color: var(--emerald); box-shadow: 0 0 0 3px rgba(16,212,138,.12); }
+.inp::placeholder { color: var(--muted); }
+.err { color: var(--rose); font-size: 12px; font-weight: 600; margin-bottom: 12px; text-align: left; display: none; }
+.login-btn {
+  width: 100%; padding: 14px;
+  border: none; border-radius: 13px;
+  background: var(--grad);
+  color: #fff; font-family: inherit; font-size: 15px; font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(16,212,138,.3);
+  transition: .2s;
+}
+.login-btn:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(16,212,138,.35); }
+
+/* ── HOME ── */
+.greeting-bar {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 20px 22px;
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 28px;
+}
+.gr-av {
+  width: 52px; height: 52px; border-radius: 14px; flex-shrink: 0;
+  background: var(--grad);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; font-weight: 900; color: #fff;
+  box-shadow: 0 0 20px rgba(16,212,138,.25);
+}
+.gr-info h3 { font-size: 17px; font-weight: 800; margin-bottom: 4px; }
+.gr-info p { font-size: 12px; color: var(--muted); }
+.gr-chips { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 10px; }
+.chip {
+  font-size: 11px; font-weight: 700;
+  padding: 3px 12px; border-radius: 100px;
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.chip-em { background: var(--emerald-bg); color: var(--emerald); border: 1px solid var(--emerald-border); }
+.chip-sky { background: var(--sky-bg); color: var(--sky); border: 1px solid var(--sky-border); }
+.chip-am { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+
+.sec-title {
+  font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 12px;
+  display: flex; align-items: center; gap: 10px;
+}
+.sec-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+/* Mode cards */
+.mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 26px; }
+@media(max-width:500px) { .mode-grid { grid-template-columns: 1fr; } }
+
+.mode-card {
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  padding: 18px 16px;
+  cursor: pointer; transition: .22s;
+  text-align: left; position: relative; overflow: hidden;
+}
+.mode-card::before {
+  content: '';
+  position: absolute; inset: 0;
+  opacity: 0; transition: .22s;
+  border-radius: 14px;
+}
+.mode-card:hover { transform: translateY(-3px); border-color: var(--border2); }
+.mode-card.sel { border-color: var(--emerald); background: var(--emerald-bg); }
+.mode-card.sel::before { opacity: 1; }
+.mode-icon { font-size: 28px; margin-bottom: 10px; }
+.mode-name { font-size: 14px; font-weight: 800; margin-bottom: 4px; }
+.mode-desc { font-size: 11px; color: var(--muted); line-height: 1.55; }
+.mode-badge {
+  position: absolute; top: 13px; right: 13px;
+  font-size: 9px; font-weight: 800; letter-spacing: 1px;
+  padding: 2px 8px; border-radius: 100px; text-transform: uppercase;
+  background: var(--emerald-bg); color: var(--emerald); border: 1px solid var(--emerald-border);
+}
+
+.go-btn {
+  display: block; width: 100%; padding: 15px;
+  border: none; border-radius: 14px;
+  background: var(--grad);
+  color: #fff; font-family: inherit; font-size: 15px; font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(16,212,138,.28);
+  transition: .22s;
+}
+.go-btn:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(16,212,138,.35); }
+
+/* ── BOTTOM SHEET ── */
+.sheet-bg {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,.72); z-index: 500;
+  align-items: flex-end; justify-content: center;
+}
+.sheet-bg.open { display: flex; animation: bfade .2s; }
+@keyframes bfade { from{opacity:0} to{opacity:1} }
+.sheet {
+  background: var(--card);
+  border-radius: 24px 24px 0 0;
+  border-top: 1px solid var(--border);
+  width: 100%; max-width: 780px;
+  padding: 14px 20px 40px;
+  max-height: 88vh; overflow-y: auto;
+  animation: slideUp .3s cubic-bezier(.2,.8,.2,1);
+}
+@keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+.sheet-handle { width: 36px; height: 4px; border-radius: 100px; background: var(--border2); margin: 0 auto 18px; }
+.sheet-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 18px;
+}
+.sheet-title { font-size: 17px; font-weight: 800; }
+.close-btn {
+  background: var(--card2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 5px 12px;
+  color: var(--muted); font-family: inherit; font-size: 12px; font-weight: 700;
+  cursor: pointer;
+}
+.sub-lbl {
+  font-size: 11px; font-weight: 700; letter-spacing: 1.8px; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 10px; margin-top: 16px;
+  display: flex; align-items: center; gap: 8px;
+}
+.sub-lbl::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.topic-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; }
+.topic-pill {
+  background: var(--card2); border: 2px solid var(--border);
+  border-radius: 100px; padding: 7px 18px;
+  cursor: pointer; color: var(--muted);
+  font-family: inherit; font-size: 12px; font-weight: 700;
+  transition: .18s;
+}
+.topic-pill.on {
+  background: var(--emerald-bg); border-color: var(--emerald); color: var(--emerald);
+}
+.cnt-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.cnt-btn {
+  background: var(--card2); border: 2px solid var(--border);
+  border-radius: 10px; padding: 8px 20px;
+  cursor: pointer; color: var(--muted);
+  font-family: inherit; font-size: 13px; font-weight: 700; transition: .18s;
+}
+.cnt-btn.on { background: var(--sky-bg); border-color: var(--sky); color: var(--sky); }
+
+/* ── QUIZ TOP BAR ── */
+.q-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.q-badge {
+  font-size: 10px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;
+  padding: 5px 14px; border-radius: 100px;
+  background: var(--emerald-bg); color: var(--emerald); border: 1px solid var(--emerald-border);
+}
+.q-badge.violet { background: var(--violet-bg); color: var(--violet); border-color: var(--violet-border); }
+.q-badge.sky { background: var(--sky-bg); color: var(--sky); border-color: var(--sky-border); }
+.q-info { font-size: 12px; color: var(--muted); }
+.q-info b { color: var(--text); font-size: 14px; }
+
+.stats-bar {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 11px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 12px;
+  flex-wrap: wrap; gap: 10px;
+}
+.stat-group { display: flex; align-items: center; gap: 14px; }
+.stat { text-align: center; }
+.stat-n { font-size: 20px; font-weight: 900; line-height: 1; }
+.stat-l { font-size: 10px; color: var(--muted); font-weight: 700; margin-top: 2px; }
+.stat.ok .stat-n { color: var(--emerald); }
+.stat.no .stat-n { color: var(--rose); }
+.stat.sk .stat-n { color: var(--amber); }
+.stat-div { width: 1px; height: 34px; background: var(--border); }
+.live-score { display: flex; align-items: baseline; gap: 3px; }
+.live-score-n { font-size: 24px; font-weight: 900; color: var(--amber); }
+.live-score-m { font-size: 13px; color: var(--muted); font-weight: 700; }
+
+/* Progress bar */
+.pbar { height: 3px; background: var(--card2); border-radius: 100px; overflow: hidden; margin-bottom: 14px; }
+.pbar-fill { height: 100%; background: var(--grad); border-radius: 100px; transition: width .4s; }
+.pbar-fill.warm { background: var(--grad-warm); }
+
+/* Dots */
+.dots { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 14px; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--card2); border: 1.5px solid var(--border); transition: .2s; }
+.dot.cur { border-color: var(--sky); background: var(--sky-bg); transform: scale(1.45); }
+.dot.ok { background: var(--emerald); border-color: var(--emerald); }
+.dot.no { background: var(--rose); border-color: var(--rose); }
+.dot.sk { background: var(--amber); border-color: var(--amber); }
+
+/* ── QUESTION CARD ── */
+.q-card {
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-radius: 18px;
+  padding: 22px 20px;
+  margin-bottom: 12px; transition: .3s;
+}
+.q-card.glow-ok { border-color: var(--emerald); box-shadow: 0 0 30px rgba(16,212,138,.15); }
+.q-card.glow-no { border-color: var(--rose); box-shadow: 0 0 30px rgba(244,63,94,.15); animation: shk .3s ease; }
+@keyframes shk { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+
+.q-num { font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 7px; }
+.q-text { font-size: clamp(13px,2vw,16px); font-weight: 600; line-height: 1.75; }
+.q-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+.q-tag {
+  font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 100px;
+  background: var(--sky-bg); color: var(--sky); border: 1px solid var(--sky-border);
+}
+.q-rep-tag {
+  font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 100px;
+  background: var(--violet-bg); color: var(--violet); border: 1px solid var(--violet-border);
+}
+
+/* ── OPTIONS ── */
+.opts { display: grid; gap: 9px; margin-bottom: 12px; }
+.opt {
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-radius: 13px;
+  padding: 13px 15px;
+  cursor: pointer; display: flex; align-items: flex-start; gap: 11px;
+  text-align: left; font-family: inherit; color: var(--text);
+  font-size: 13px; font-weight: 600; line-height: 1.6;
+  transition: .18s; width: 100%;
+}
+.opt:not(.dis):hover { border-color: var(--amber); background: var(--amber-bg); transform: translateX(4px); }
+.opt-lbl {
+  min-width: 30px; height: 30px; border-radius: 8px;
+  background: var(--card2); border: 1.5px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 900; flex-shrink: 0; transition: .2s;
+}
+.opt-body { flex: 1; }
+.opt-sub { font-size: 11px; font-weight: 700; margin-top: 4px; display: none; }
+
+.opt.st-correct { border-color: var(--emerald); background: var(--emerald-bg); }
+.opt.st-correct .opt-lbl { background: var(--emerald); color: #fff; border-color: var(--emerald); }
+.opt.st-correct .opt-sub { display: block; color: var(--emerald); }
+.opt.st-wrong { border-color: var(--rose); background: var(--rose-bg); }
+.opt.st-wrong .opt-lbl { background: var(--rose); color: #fff; border-color: var(--rose); }
+.opt.st-wrong .opt-sub { display: block; color: var(--rose); }
+.opt.st-answer { border-color: var(--emerald); background: rgba(16,212,138,.05); }
+.opt.st-answer .opt-lbl { background: var(--emerald-bg); color: var(--emerald); border-color: var(--emerald); }
+.opt.st-answer .opt-sub { display: block; color: var(--emerald); }
+.opt.dis { cursor: default; pointer-events: none; }
+
+/* ── ANSWER BANNER ── */
+.banner {
+  border-radius: 14px; padding: 14px 16px;
+  display: flex; align-items: flex-start; gap: 13px;
+  margin-bottom: 11px; animation: fadeSlide .2s;
+}
+.banner.ok { background: var(--emerald-bg); border: 2px solid var(--emerald-border); }
+.banner.no { background: var(--rose-bg); border: 2px solid var(--rose-border); }
+.banner.skip { background: var(--amber-bg); border: 2px solid var(--amber-border); }
+.banner-ico { font-size: 28px; flex-shrink: 0; line-height: 1; }
+.banner-body { flex: 1; }
+.banner-lbl {
+  font-size: 10px; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 3px;
+}
+.banner.ok .banner-lbl { color: var(--emerald); }
+.banner.no .banner-lbl { color: var(--rose); }
+.banner.skip .banner-lbl { color: var(--amber); }
+.banner-main { font-size: 14px; font-weight: 800; margin-bottom: 3px; }
+.banner-ans { font-size: 12px; color: var(--muted); font-weight: 600; }
+.banner-ans strong { color: var(--text); }
+
+/* Explanation */
+.expl {
+  background: var(--card2);
+  border-left: 3px solid var(--amber);
+  border-radius: 10px;
+  padding: 12px 15px;
+  font-size: 12px; color: var(--muted); line-height: 1.65;
+  margin-bottom: 11px; display: none;
+}
+.expl.show { display: block; animation: fadeSlide .2s; }
+
+/* ── STICKY BOTTOM ── */
+.sticky {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 150;
+  background: linear-gradient(to top, rgba(10,12,18,1) 55%, rgba(10,12,18,0));
+  padding: 16px 20px 26px;
+  pointer-events: none;
+}
+.sticky-inner { max-width: 780px; margin: 0 auto; display: flex; gap: 10px; pointer-events: all; }
+.btn-home-f {
+  padding: 13px 14px; border-radius: 12px;
+  border: 1.5px solid var(--border); background: var(--card2);
+  color: var(--muted); font-family: inherit; font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: .2s; flex-shrink: 0;
+}
+.btn-home-f:hover { border-color: var(--rose); color: var(--rose); }
+.btn-skip-f {
+  padding: 13px 18px; border-radius: 12px;
+  border: 1.5px solid var(--border); background: var(--card2);
+  color: var(--muted); font-family: inherit; font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: .2s; flex-shrink: 0;
+}
+.btn-skip-f:hover { border-color: var(--text); color: var(--text); }
+.btn-next-f {
+  flex: 1; padding: 14px 20px; border: none; border-radius: 13px;
+  background: var(--grad-warm); color: #fff;
+  font-family: inherit; font-size: 14px; font-weight: 800;
+  cursor: pointer; box-shadow: 0 6px 22px rgba(244,63,94,.3); transition: .2s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.btn-next-f:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(244,63,94,.38); }
+.btn-next-f:disabled { background: var(--card2); color: var(--muted); box-shadow: none; cursor: default; transform: none; }
+.btn-check-f {
+  flex: 1; padding: 14px 20px; border: none; border-radius: 13px;
+  background: var(--grad); color: #fff;
+  font-family: inherit; font-size: 14px; font-weight: 800;
+  cursor: pointer; box-shadow: 0 6px 22px rgba(16,212,138,.28); transition: .2s;
+}
+.btn-check-f:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(16,212,138,.35); }
+
+/* ── TYPING INPUT ── */
+.t-input {
+  width: 100%;
+  background: var(--card); border: 2px solid var(--border);
+  border-radius: 14px; padding: 14px 18px;
+  color: var(--text); font-family: inherit; font-size: 17px; font-weight: 700;
+  outline: none; transition: .2s; margin-bottom: 12px;
+}
+.t-input:focus { border-color: var(--amber); box-shadow: 0 0 0 3px rgba(245,158,11,.12); }
+
+/* ── FLASHCARD ── */
+.fc-cnt { text-align: center; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+.fc-wrap { perspective: 1100px; margin: 10px auto 6px; max-width: 520px; cursor: pointer; }
+.fc { width: 100%; aspect-ratio: 16/9; position: relative; transform-style: preserve-3d; transition: transform .5s cubic-bezier(.4,0,.2,1); }
+.fc.flip { transform: rotateY(180deg); }
+.fc-face {
+  position: absolute; inset: 0; border-radius: 18px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 24px; text-align: center; backface-visibility: hidden;
+}
+.fc-front { background: var(--card); border: 2px solid var(--border); }
+.fc-back { background: linear-gradient(135deg,rgba(16,212,138,.08),rgba(56,189,248,.06)); border: 2px solid var(--emerald-border); transform: rotateY(180deg); }
+.fc-yr { font-family: 'Fraunces', serif; font-size: 40px; font-weight: 700; color: var(--amber); letter-spacing: -1px; }
+.fc-hint { font-size: 10px; color: var(--muted); margin-top: 8px; letter-spacing: 1px; }
+.fc-lbl { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--emerald); margin-bottom: 9px; }
+.fc-evt { font-size: 14px; font-weight: 700; line-height: 1.6; }
+.fc-topic { font-size: 11px; color: var(--sky); font-weight: 700; margin-top: 10px; }
+.fc-nav { display: flex; gap: 8px; justify-content: center; margin-top: 10px; }
+.fc-marks { display: flex; gap: 8px; justify-content: center; margin-top: 9px; }
+.fc-stat { text-align: center; font-size: 12px; color: var(--muted); margin-top: 10px; }
+
+/* ── RESULT ── */
+.res-hero { text-align: center; padding: 30px 0 20px; }
+.res-ico { font-size: 54px; margin-bottom: 10px; }
+.res-title { font-family: 'Fraunces', serif; font-size: 32px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.5px; }
+.res-sub { color: var(--muted); font-size: 13px; }
+
+.score-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding: 26px;
+  margin-bottom: 18px; text-align: center;
+  position: relative; overflow: hidden;
+}
+.score-card::before {
+  content: '';
+  position: absolute; top: -60px; right: -60px;
+  width: 200px; height: 200px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(16,212,138,.12), transparent 70%);
+}
+.score-big { display: flex; align-items: baseline; justify-content: center; gap: 4px; margin-bottom: 5px; }
+.score-n { font-family: 'Fraunces', serif; font-size: 60px; font-weight: 700; line-height: 1; letter-spacing: -2px; }
+.score-max { font-size: 24px; font-weight: 700; color: var(--muted); }
+.score-lbl { font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 18px; }
+.breakdown { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+.bd { padding: 12px; border-radius: 12px; text-align: center; }
+.bd-ok { background: var(--emerald-bg); border: 1px solid var(--emerald-border); }
+.bd-no { background: var(--rose-bg); border: 1px solid var(--rose-border); }
+.bd-sk { background: var(--amber-bg); border: 1px solid var(--amber-border); }
+.bd-n { font-size: 26px; font-weight: 900; margin-bottom: 2px; }
+.bd-ok .bd-n { color: var(--emerald); }
+.bd-no .bd-n { color: var(--rose); }
+.bd-sk .bd-n { color: var(--amber); }
+.bd-l { font-size: 10px; color: var(--muted); font-weight: 700; }
+
+.ring-wrap { display: flex; justify-content: center; margin-bottom: 16px; }
+.ring { width: 130px; height: 130px; position: relative; }
+.ring svg { transform: rotate(-90deg); }
+.ring-inner { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.ring-pct { font-size: 26px; font-weight: 900; }
+.ring-lbl { font-size: 9px; color: var(--muted); font-weight: 800; letter-spacing: 1px; }
+
+.res-btns { display: flex; gap: 9px; justify-content: center; flex-wrap: wrap; margin-bottom: 26px; }
+.rbtn { padding: 10px 20px; border-radius: 10px; border: none; cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 700; transition: .18s; }
+.rbtn-ghost { background: var(--card2); border: 1.5px solid var(--border); color: var(--muted); }
+.rbtn-ghost:hover { border-color: var(--text); color: var(--text); }
+.rbtn-em { background: var(--grad); color: #fff; box-shadow: 0 4px 14px rgba(16,212,138,.28); }
+.rbtn-rose { background: var(--grad-warm); color: #fff; box-shadow: 0 4px 14px rgba(244,63,94,.25); }
+
+.rev-title { font-size: 14px; font-weight: 800; margin-bottom: 12px; }
+.rev-item {
+  background: var(--card); border: 1px solid var(--border);
+  border-left: 4px solid var(--border);
+  border-radius: 12px; padding: 14px 15px; margin-bottom: 9px;
+}
+.rev-item.ok { border-left-color: var(--emerald); }
+.rev-item.no { border-left-color: var(--rose); }
+.rev-item.sk { border-left-color: var(--amber); }
+.rev-q { font-size: 12px; font-weight: 700; margin-bottom: 8px; line-height: 1.55; }
+.rev-row {
+  display: flex; align-items: flex-start; gap: 8px;
+  padding: 7px 10px; border-radius: 8px; margin-top: 5px;
+}
+.rev-row.r-ok { background: var(--emerald-bg); border: 1px solid var(--emerald-border); }
+.rev-row.r-no { background: var(--rose-bg); border: 1px solid var(--rose-border); }
+.rev-row.r-sk { background: var(--amber-bg); border: 1px solid var(--amber-border); }
+.rev-tag { font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 5px; flex-shrink: 0; white-space: nowrap; margin-top: 1px; }
+.rt-ok { background: var(--emerald-bg); color: var(--emerald); }
+.rt-no { background: var(--rose-bg); color: var(--rose); }
+.rt-sk { background: var(--amber-bg); color: var(--amber); }
+.rev-ans { font-size: 12px; font-weight: 700; }
+.rev-ans.dim { color: var(--muted); }
+
+/* ── MODAL ── */
+.modal-bg {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,.75); z-index: 999;
+  align-items: center; justify-content: center; padding: 20px;
+}
+.modal-bg.open { display: flex; }
+.modal {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 20px; padding: 30px 26px;
+  max-width: 360px; width: 100%; text-align: center;
+  animation: fadeSlide .25s;
+}
+.modal h3 { font-size: 19px; font-weight: 800; margin-bottom: 8px; }
+.modal p { color: var(--muted); font-size: 13px; margin-bottom: 22px; line-height: 1.65; }
+.modal-btns { display: flex; gap: 8px; justify-content: center; }
+
+/* Comeback bar */
+.comeback {
+  background: var(--violet-bg); border: 1.5px solid var(--violet-border);
+  border-radius: 10px; padding: 9px 14px;
+  font-size: 12px; color: var(--violet); font-weight: 700;
+  display: flex; align-items: center; gap: 7px; margin-bottom: 10px;
+}
+
+/* Rep info bar */
+.rep-bar { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 10px; }
+.rep-chip { font-size: 11px; font-weight: 800; padding: 3px 11px; border-radius: 100px; }
+
+/* Formula section */
+.formula-section { margin-bottom: 28px; }
+.formula-card {
+  background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+  margin-bottom: 8px; overflow: hidden;
+}
+.formula-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px; cursor: pointer; transition: .18s;
+}
+.formula-head:hover { background: var(--card2); }
+.formula-name { font-size: 14px; font-weight: 700; }
+.formula-unit { font-size: 12px; font-weight: 700; color: var(--sky); background: var(--sky-bg); border: 1px solid var(--sky-border); padding: 2px 10px; border-radius: 100px; }
+.formula-body { padding: 0 18px; max-height: 0; overflow: hidden; transition: max-height .3s ease, padding .3s; }
+.formula-body.open { max-height: 200px; padding: 14px 18px; border-top: 1px solid var(--border); }
+.formula-expr { font-size: 15px; font-weight: 700; color: var(--amber); font-family: 'Fraunces', serif; line-height: 1.6; }
+.formula-note { font-size: 12px; color: var(--muted); margin-top: 6px; }
+
+/* Formula nav tabs */
+.tab-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.tab {
+  background: var(--card2); border: 2px solid var(--border);
+  border-radius: 100px; padding: 6px 18px;
+  cursor: pointer; color: var(--muted); font-family: inherit;
+  font-size: 12px; font-weight: 700; transition: .18s;
+}
+.tab.on { background: var(--amber-bg); border-color: var(--amber); color: var(--amber); }
+
+/* Scroll utility */
+.spacer { height: 90px; }
+</style>
+</head>
+<body>
+
+<div class="bg-glow bg-glow-1"></div>
+<div class="bg-glow bg-glow-2"></div>
+
+<!-- HEADER -->
+<div class="hdr" id="hdr" style="display:none">
+  <div class="logo">
+    <div class="logo-mark">🗺️</div>
+    <div class="logo-text">Địa Lý <span>12</span></div>
+  </div>
+  <div class="hdr-right">
+    <div class="user-pill">
+      <div class="user-av" id="hdrAv">?</div>
+      <div class="user-name" id="hdrName">—</div>
+    </div>
+    <button class="btn-out" onclick="logout()">← Thoát</button>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div id="loginPage">
+  <div class="login-page">
+    <div class="login-box">
+      <div class="login-icon">🗺️</div>
+      <h2>Ôn Thi Địa Lý 12</h2>
+      <p>Trắc nghiệm, thẻ ghi nhớ, và bảng công thức — tất cả trong một. Nhập tên để bắt đầu!</p>
+      <label class="field-lbl">Tên học sinh</label>
+      <input class="inp" id="loginName" placeholder="Ví dụ: Nguyễn Văn A" maxlength="40" onkeydown="if(event.key==='Enter')doLogin()">
+      <div class="err" id="loginErr">Vui lòng nhập tên của bạn!</div>
+      <button class="login-btn" onclick="doLogin()">🚀 Bắt đầu ngay</button>
+    </div>
+  </div>
+</div>
+
+<!-- APP WRAP -->
+<div class="wrap" id="appWrap" style="display:none">
+
+<!-- HOME -->
+<div class="screen active" id="sHome">
+  <div class="greeting-bar">
+    <div class="gr-av" id="grAv">?</div>
+    <div class="gr-info">
+      <h3 id="grName">Xin chào!</h3>
+      <p id="grSub">Chọn chế độ học và bắt đầu thôi!</p>
+      <div class="gr-chips">
+        <div class="chip chip-em">📝 <span id="grSess">0</span> lần làm</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-title">🎮 Chọn chế độ học</div>
+  <div class="mode-grid">
+    <div class="mode-card sel" id="mQuiz" onclick="pickMode('quiz',this)">
+      <div class="mode-badge">Phổ biến</div>
+      <div class="mode-icon">📝</div>
+      <div class="mode-name">Trắc Nghiệm</div>
+      <div class="mode-desc">4 lựa chọn ABCD, trộn ngẫu nhiên, có giải thích đáp án</div>
+    </div>
+    <div class="mode-card" id="mRepeat" onclick="pickMode('repeat',this)">
+      <div class="mode-icon">🔁</div>
+      <div class="mode-name">Lặp Lại Thông Minh</div>
+      <div class="mode-desc">Câu sai tự động quay lại sau 2–3 câu cho đến khi thuộc</div>
+    </div>
+    <div class="mode-card" id="mFlash" onclick="pickMode('flash',this)">
+      <div class="mode-icon">🃏</div>
+      <div class="mode-name">Thẻ Ghi Nhớ</div>
+      <div class="mode-desc">Lật thẻ xem kiến thức, đánh dấu thuộc / chưa thuộc</div>
+    </div>
+    <div class="mode-card" id="mFormula" onclick="pickMode('formula',this)">
+      <div class="mode-icon">📐</div>
+      <div class="mode-name">Bảng Công Thức</div>
+      <div class="mode-desc">Tra cứu nhanh các công thức Địa lý tự nhiên, dân cư, kinh tế</div>
+    </div>
+  </div>
+
+  <button class="go-btn" onclick="openSheet()">🚀 Bắt đầu</button>
+</div>
+
+<!-- QUIZ -->
+<div class="screen" id="sQuiz">
+  <div class="q-hdr">
+    <div style="display:flex;align-items:center;gap:9px">
+      <div class="q-badge">📝 Trắc Nghiệm</div>
+      <div class="q-info">Câu <b id="qCur">1</b> / <b id="qTot">?</b></div>
+    </div>
+    <button class="btn-out" onclick="goHome()">🏠 Thoát</button>
+  </div>
+  <div class="stats-bar">
+    <div class="stat-group">
+      <div class="stat ok"><div class="stat-n" id="qOk">0</div><div class="stat-l">✅ Đúng</div></div>
+      <div class="stat-div"></div>
+      <div class="stat no"><div class="stat-n" id="qNo">0</div><div class="stat-l">❌ Sai</div></div>
+      <div class="stat-div"></div>
+      <div class="stat sk"><div class="stat-n" id="qSk">0</div><div class="stat-l">⏭ Bỏ qua</div></div>
+    </div>
+    <div class="live-score">
+      <div class="live-score-n" id="qScore">0.0</div>
+      <div class="live-score-m">/ 10</div>
+    </div>
+  </div>
+  <div class="pbar"><div class="pbar-fill" id="qPbar" style="width:0"></div></div>
+  <div class="dots" id="qDots"></div>
+  <div class="q-card" id="qCard">
+    <div class="q-num" id="qNum">Câu 1</div>
+    <div class="q-text" id="qText"></div>
+    <div class="q-tags"><div class="q-tag" id="qTag"></div></div>
+  </div>
+  <div class="opts" id="qOpts"></div>
+  <div id="qBanner"></div>
+  <div class="expl" id="qExpl"></div>
+  <div class="spacer"></div>
+</div>
+
+<!-- REPEAT -->
+<div class="screen" id="sRepeat">
+  <div class="q-hdr">
+    <div style="display:flex;align-items:center;gap:9px">
+      <div class="q-badge violet">🔁 Lặp Lại</div>
+      <div class="q-info">Còn <b id="rpQ">?</b> câu</div>
+    </div>
+    <button class="btn-out" onclick="goHome()">🏠 Thoát</button>
+  </div>
+  <div class="stats-bar">
+    <div class="stat-group">
+      <div class="stat ok"><div class="stat-n" id="rpOk">0</div><div class="stat-l">✅ Đúng</div></div>
+      <div class="stat-div"></div>
+      <div class="stat no"><div class="stat-n" id="rpNo">0</div><div class="stat-l">❌ Sai</div></div>
+      <div class="stat-div"></div>
+      <div class="stat" style="color:var(--sky)"><div class="stat-n" id="rpDone" style="color:var(--sky)">0</div><div class="stat-l">🏁 Xong</div></div>
+    </div>
+    <div class="live-score">
+      <div class="live-score-n" id="rpScore">0.0</div>
+      <div class="live-score-m">/ 10</div>
+    </div>
+  </div>
+  <div class="pbar"><div class="pbar-fill warm" id="rpPbar" style="width:0"></div></div>
+  <div class="rep-bar" id="rpInfoBar"></div>
+  <div id="rpComebackNotice"></div>
+  <div class="q-card" id="rpCard">
+    <div class="q-num" id="rpNum">Câu 1</div>
+    <div class="q-text" id="rpText"></div>
+    <div class="q-tags"><div class="q-tag" id="rpTag"></div><div class="q-rep-tag" id="rpRepTag" style="display:none"></div></div>
+  </div>
+  <div class="opts" id="rpOpts"></div>
+  <div id="rpBanner"></div>
+  <div class="expl" id="rpExpl"></div>
+  <div class="spacer"></div>
+</div>
+
+<!-- FLASHCARD -->
+<div class="screen" id="sFlash">
+  <div class="q-hdr">
+    <button class="btn-out" onclick="goHome()">← Về nhà</button>
+    <div class="q-badge" style="background:var(--amber-bg);color:var(--amber);border-color:var(--amber-border)">🃏 Thẻ Ghi Nhớ</div>
+    <div style="font-size:11px;color:var(--muted)">Nhấn thẻ để lật</div>
+  </div>
+  <div class="fc-cnt" id="fcCnt">1 / 10</div>
+  <div class="fc-wrap" onclick="flipFC()">
+    <div class="fc" id="fcCard">
+      <div class="fc-face fc-front">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:8px;letter-spacing:1px">📅 THỜI GIAN / SỰ KIỆN</div>
+        <div class="fc-yr" id="fcFront"></div>
+        <div class="fc-hint">Nhấp để xem nội dung →</div>
+      </div>
+      <div class="fc-face fc-back">
+        <div class="fc-lbl" id="fcBackLbl">📜 NỘI DUNG</div>
+        <div class="fc-evt" id="fcBack"></div>
+        <div class="fc-topic" id="fcTopic"></div>
+      </div>
+    </div>
+  </div>
+  <div class="fc-nav">
+    <button class="rbtn rbtn-ghost" onclick="fcPrev()">← Trước</button>
+    <button class="rbtn rbtn-ghost" onclick="fcShuffle()">🔀 Xáo bài</button>
+    <button class="rbtn rbtn-ghost" onclick="fcNext()">Sau →</button>
+  </div>
+  <div class="fc-marks" style="margin-top:10px">
+    <button class="rbtn" style="background:var(--emerald-bg);border:1.5px solid var(--emerald);color:var(--emerald);padding:11px 22px" onclick="fcMark('know')">✅ Đã thuộc</button>
+    <button class="rbtn" style="background:var(--rose-bg);border:1.5px solid var(--rose);color:var(--rose);padding:11px 22px" onclick="fcMark('no')">❌ Chưa thuộc</button>
+  </div>
+  <div class="fc-stat">Đã thuộc: <b style="color:var(--emerald)" id="fcKn">0</b> &nbsp;|&nbsp; Chưa: <b style="color:var(--rose)" id="fcUn">0</b></div>
+</div>
+
+<!-- FORMULA -->
+<div class="screen" id="sFormula">
+  <div class="q-hdr" style="margin-bottom:16px">
+    <div style="display:flex;align-items:center;gap:9px">
+      <div class="q-badge sky">📐 Bảng Công Thức</div>
+    </div>
+    <button class="btn-out" onclick="goHome()">← Về nhà</button>
+  </div>
+  <div class="tab-row">
+    <button class="tab on" onclick="pickFormulaTab('tn',this)">🌿 Tự Nhiên</button>
+    <button class="tab" onclick="pickFormulaTab('dc',this)">👥 Dân Cư</button>
+    <button class="tab" onclick="pickFormulaTab('kt',this)">💰 Kinh Tế</button>
+    <button class="tab" onclick="pickFormulaTab('bd',this)">📊 Biểu Đồ</button>
+  </div>
+  <div class="formula-section" id="fmBox"></div>
+</div>
+
+<!-- RESULT -->
+<div class="screen" id="sResult">
+  <div class="res-hero">
+    <div class="res-ico" id="resIco">🎉</div>
+    <div class="res-title" id="resTtl">Xuất sắc!</div>
+    <div class="res-sub" id="resSub">Kết quả bài làm</div>
+  </div>
+
+  <div class="score-card">
+    <div class="score-big">
+      <div class="score-n" id="resScore10" style="color:var(--amber)">0.0</div>
+      <div class="score-max">/ 10</div>
+    </div>
+    <div class="score-lbl">Điểm số</div>
+    <div class="breakdown">
+      <div class="bd bd-ok"><div class="bd-n" id="resOk">0</div><div class="bd-l">✅ Câu đúng</div></div>
+      <div class="bd bd-no"><div class="bd-n" id="resNo">0</div><div class="bd-l">❌ Câu sai</div></div>
+      <div class="bd bd-sk"><div class="bd-n" id="resSk">0</div><div class="bd-l">⏭ Bỏ qua</div></div>
+    </div>
+  </div>
+
+  <div class="ring-wrap">
+    <div class="ring">
+      <svg width="130" height="130" viewBox="0 0 130 130">
+        <circle cx="65" cy="65" r="54" fill="none" stroke="var(--card2)" stroke-width="8"/>
+        <circle cx="65" cy="65" r="54" fill="none" stroke="url(#rg)" stroke-width="8"
+          stroke-linecap="round" stroke-dasharray="339" id="ringFill" stroke-dashoffset="339"/>
+        <defs><linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#10d48a"/><stop offset="100%" stop-color="#38bdf8"/>
+        </linearGradient></defs>
+      </svg>
+      <div class="ring-inner">
+        <div class="ring-pct" id="ringPct">0%</div>
+        <div class="ring-lbl">CHÍNH XÁC</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center;font-size:13px;color:var(--muted);margin-bottom:8px">
+    ⏱ Thời gian: <b id="resTm" style="color:var(--text)">0s</b>
+  </div>
+
+  <div class="res-btns">
+    <button class="rbtn rbtn-em" onclick="retryQuiz()">🔄 Làm lại</button>
+    <button class="rbtn rbtn-rose" onclick="doGoHome()">🏠 Về nhà</button>
+  </div>
+
+  <div class="rev-title">📋 Xem lại chi tiết <span id="revCnt" style="font-size:12px;color:var(--muted);font-weight:600"></span></div>
+  <div id="revList"></div>
+</div>
+
+</div><!-- appWrap -->
+
+<!-- STICKY BAR -->
+<div class="sticky" id="stickyBar" style="display:none">
+  <div class="sticky-inner" id="stickyInner"></div>
+</div>
+
+<!-- SHEET -->
+<div class="sheet-bg" id="startSheet" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head">
+      <div class="sheet-title">⚙️ Cài đặt bài thi</div>
+      <button class="close-btn" onclick="document.getElementById('startSheet').classList.remove('open')">✕ Đóng</button>
+    </div>
+    <div class="sub-lbl">📚 Chọn chủ đề</div>
+    <div class="topic-pills" id="topicBox"></div>
+    <div class="sub-lbl">🔢 Số câu</div>
+    <div class="cnt-row">
+      <button class="cnt-btn" onclick="pickCnt(10,this)">10 câu</button>
+      <button class="cnt-btn" onclick="pickCnt(20,this)">20 câu</button>
+      <button class="cnt-btn" onclick="pickCnt(30,this)">30 câu</button>
+      <button class="cnt-btn" onclick="pickCnt(50,this)">50 câu</button>
+      <button class="cnt-btn on" onclick="pickCnt(9999,this)">Tất cả</button>
+    </div>
+    <button class="go-btn" style="margin-top:20px" onclick="go()">🚀 Bắt đầu ngay</button>
+  </div>
+</div>
+
+<!-- EXIT MODAL -->
+<div class="modal-bg" id="exitModal">
+  <div class="modal">
+    <h3>⚠️ Thoát bài?</h3>
+    <p>Kết quả sẽ không được lưu nếu bạn thoát giữa chừng.</p>
+    <div class="modal-btns">
+      <button class="rbtn rbtn-ghost" onclick="closeModal('exitModal')">Tiếp tục</button>
+      <button class="rbtn rbtn-rose" onclick="confirmHome()">Thoát</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOGOUT MODAL -->
+<div class="modal-bg" id="logoutModal">
+  <div class="modal">
+    <h3>👋 Đăng xuất?</h3>
+    <p>Hẹn gặp lại <b id="logoutNm"></b>! Điểm của bạn đã được lưu.</p>
+    <div class="modal-btns">
+      <button class="rbtn rbtn-ghost" onclick="closeModal('logoutModal')">Ở lại</button>
+      <button class="rbtn rbtn-rose" onclick="confirmLogout()">Đăng xuất</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════
+//  DATA
+// ════════════════════════════════════════
+const DATA = {
+"Vị trí & Lãnh thổ": [
+  {q:"Diện tích vùng đất Việt Nam khoảng bao nhiêu?", a:"Hơn 331 nghìn km²", opts:["Hơn 331 nghìn km²","Hơn 280 nghìn km²","Hơn 400 nghìn km²","Hơn 500 nghìn km²"], expl:"Diện tích đất liền và hải đảo Việt Nam hơn 331 nghìn km²."},
+  {q:"Đường bờ biển Việt Nam dài bao nhiêu km?", a:"3260 km từ Quảng Ninh đến Kiên Giang", opts:["3260 km từ Quảng Ninh đến Kiên Giang","2500 km từ Móng Cái đến Cà Mau","4000 km từ Bắc vào Nam","1800 km"], expl:"Bờ biển Việt Nam dài 3260 km từ Quảng Ninh đến Kiên Giang (An Giang)."},
+  {q:"Diện tích vùng biển Việt Nam (Biển Đông) khoảng bao nhiêu?", a:"Khoảng 1 triệu km² (gấp 3 lần vùng đất)", opts:["Khoảng 1 triệu km² (gấp 3 lần vùng đất)","Khoảng 500 nghìn km²","Khoảng 2 triệu km²","Bằng diện tích đất liền"], expl:"Vùng biển rộng khoảng 1 triệu km², rộng gấp 3 lần vùng đất."},
+  {q:"Hai quần đảo xa bờ của Việt Nam thuộc tỉnh/thành phố nào?", a:"Hoàng Sa (Đà Nẵng) và Trường Sa (Khánh Hòa)", opts:["Hoàng Sa (Đà Nẵng) và Trường Sa (Khánh Hòa)","Hoàng Sa (Quảng Nam) và Trường Sa (Phú Yên)","Cả hai đều thuộc Đà Nẵng","Cả hai đều thuộc Khánh Hòa"], expl:"Quần đảo Hoàng Sa thuộc TP Đà Nẵng; quần đảo Trường Sa thuộc tỉnh Khánh Hòa."},
+  {q:"Đường biên giới đất liền Việt Nam dài khoảng bao nhiêu km?", a:"Hơn 4600 km (gần 5000 km)", opts:["Hơn 4600 km (gần 5000 km)","Hơn 3000 km","Hơn 6000 km","Khoảng 2000 km"], expl:"Đường biên giới đất liền hơn 4600 km, trong đó dài nhất là với Lào."},
+  {q:"Nước ta có đường biên giới dài nhất với nước nào?", a:"Lào", opts:["Lào","Trung Quốc","Campuchia","Myanmar"], expl:"Đường biên giới với Lào là dài nhất trong số các nước láng giềng của Việt Nam."},
+  {q:"Cực Bắc của Việt Nam thuộc tỉnh nào?", a:"Xã Lũng Cú, tỉnh Hà Giang", opts:["Xã Lũng Cú, tỉnh Hà Giang","Xã Lũng Cú, tỉnh Tuyên Quang","Xã Sín Thầu, tỉnh Điện Biên","Xã Đại Lãnh, tỉnh Khánh Hòa"], expl:"Cực Bắc là xã Lũng Cú, tỉnh Hà Giang."},
+  {q:"Cực Nam của Việt Nam thuộc tỉnh nào?", a:"Xã Đất Mũi, tỉnh Cà Mau", opts:["Xã Đất Mũi, tỉnh Cà Mau","Xã Đất Mũi, tỉnh An Giang","Thị trấn Năm Căn, Cà Mau","Xã Tân Ân, Cà Mau"], expl:"Cực Nam là xã Đất Mũi, tỉnh Cà Mau."},
+  {q:"Cực Tây của Việt Nam thuộc tỉnh nào?", a:"Xã Sín Thầu, tỉnh Điện Biên", opts:["Xã Sín Thầu, tỉnh Điện Biên","Xã Lũng Cú, tỉnh Hà Giang","Xã Đất Mũi, tỉnh Cà Mau","Mường Tè, tỉnh Lai Châu"], expl:"Cực Tây là xã Sín Thầu, tỉnh Điện Biên."},
+  {q:"Cực Đông trên đất liền của Việt Nam thuộc tỉnh nào?", a:"Xã Đại Lãnh, tỉnh Khánh Hòa", opts:["Xã Đại Lãnh, tỉnh Khánh Hòa","Mũi Né, tỉnh Bình Thuận","Xã Đất Mũi, tỉnh Cà Mau","Thành phố Đà Nẵng"], expl:"Cực Đông trên đất liền là xã Đại Lãnh, tỉnh Khánh Hòa."},
+  {q:"Tỉnh nào vừa giáp biển, vừa giáp Lào, vừa giáp Campuchia?", a:"Quảng Ngãi (qua cửa khẩu Bờ Y)", opts:["Quảng Ngãi (qua cửa khẩu Bờ Y)","Kon Tum","Quảng Nam","Đắk Lắk"], expl:"Tỉnh Kon Tum (cửa khẩu Bờ Y) giáp cả Lào và Campuchia nhưng không giáp biển; thực tế câu này đề cập đến Kon Tum. Câu hỏi có thể là Kon Tum."},
+  {q:"Vùng biển Việt Nam bao gồm mấy bộ phận?", a:"5 bộ phận", opts:["5 bộ phận","3 bộ phận","4 bộ phận","6 bộ phận"], expl:"Gồm: Nội thủy, Lãnh hải, Vùng tiếp giáp lãnh hải, Vùng đặc quyền kinh tế, Thềm lục địa."},
+  {q:"Lãnh hải Việt Nam rộng bao nhiêu hải lý?", a:"12 hải lý", opts:["12 hải lý","200 hải lý","24 hải lý","6 hải lý"], expl:"Lãnh hải rộng 12 hải lý, đây là biên giới biển quốc gia."},
+  {q:"Vùng đặc quyền kinh tế của Việt Nam rộng bao nhiêu hải lý?", a:"200 hải lý", opts:["200 hải lý","12 hải lý","100 hải lý","300 hải lý"], expl:"Vùng đặc quyền kinh tế rộng 200 hải lý tính từ đường cơ sở."},
+  {q:"Đảo lớn nhất của Việt Nam là đảo nào?", a:"Phú Quốc (tỉnh Kiên Giang)", opts:["Phú Quốc (tỉnh Kiên Giang)","Cát Bà (TP. Hải Phòng)","Côn Đảo (tỉnh Bà Rịa – Vũng Tàu)","Lý Sơn (tỉnh Quảng Ngãi)"], expl:"Đảo Phú Quốc thuộc tỉnh Kiên Giang là đảo lớn nhất Việt Nam."},
+  {q:"Tỉnh nào có diện tích lớn nhất Việt Nam?", a:"Lâm Đồng", opts:["Lâm Đồng","Đắk Lắk","Gia Lai","Nghệ An"], expl:"Lâm Đồng là tỉnh có diện tích lớn nhất Việt Nam."},
+  {q:"Thành phố trực thuộc trung ương nào KHÔNG giáp biển?", a:"Hà Nội", opts:["Hà Nội","Hải Phòng","Đà Nẵng","Cần Thơ"], expl:"Hà Nội là thành phố trực thuộc trung ương duy nhất không có đường bờ biển."},
+],
+"Khí hậu & Thiên nhiên": [
+  {q:"Ranh giới phân chia khí hậu Bắc – Nam Việt Nam là dãy núi nào?", a:"Dãy núi Bạch Mã", opts:["Dãy núi Bạch Mã","Dãy núi Hoàng Liên Sơn","Dãy Trường Sơn Bắc","Đèo Hải Vân"], expl:"Dãy núi Bạch Mã (vĩ tuyến 16°B) là ranh giới phân chia khí hậu hai miền Bắc – Nam."},
+  {q:"Khí hậu phía Bắc Việt Nam (từ 16°B trở ra) có đặc điểm gì?", a:"Nhiệt đới ẩm gió mùa, có mùa đông lạnh", opts:["Nhiệt đới ẩm gió mùa, có mùa đông lạnh","Cận xích đạo, nóng quanh năm","Ôn đới, 4 mùa rõ rệt","Khô hạn, ít mưa"], expl:"Phía Bắc có khí hậu nhiệt đới ẩm gió mùa với mùa đông lạnh (2–3 tháng dưới 18°C)."},
+  {q:"Khí hậu phía Nam Việt Nam (từ 16°B trở vào) có đặc điểm gì?", a:"Cận xích đạo gió mùa, nóng quanh năm, 2 mùa mưa/khô", opts:["Cận xích đạo gió mùa, nóng quanh năm, 2 mùa mưa/khô","Nhiệt đới ẩm, 4 mùa","Ôn đới, lạnh mùa đông","Nhiệt đới khô, ít mưa"], expl:"Phía Nam mang khí hậu cận xích đạo, nóng quanh năm với 2 mùa mưa – khô rõ rệt."},
+  {q:"Gió mùa Đông Bắc (mùa đông) xuất phát từ áp cao nào?", a:"Áp cao Xi-bia", opts:["Áp cao Xi-bia","Áp cao Bắc Ấn Độ Dương","Áp cao Chí tuyến Bắc Cận Bắc","Áp cao Thái Bình Dương"], expl:"Gió mùa Đông Bắc xuất phát từ áp cao Xi-bia (Siberia), thổi từ tháng 11 đến tháng 4 năm sau."},
+  {q:"Gió Tây Nam đầu mùa hạ xuất phát từ áp cao nào?", a:"Áp cao Bắc Ấn Độ Dương (AĐD)", opts:["Áp cao Bắc Ấn Độ Dương (AĐD)","Áp cao Xi-bia","Áp cao Chí tuyến Bắc Cận Bắc","Áp cao Thái Bình Dương"], expl:"Gió Tây Nam đầu mùa hạ (từ tháng 5–10) xuất phát từ áp cao Bắc Ấn Độ Dương."},
+  {q:"Gió Tây Nam giữa và cuối mùa hạ xuất phát từ đâu?", a:"Áp cao Cận chí tuyến Bắc Cận Bắc (Nam Bán cầu)", opts:["Áp cao Cận chí tuyến Bắc Cận Bắc (Nam Bán cầu)","Áp cao Xi-bia","Áp cao Bắc Ấn Độ Dương","Áp cao Thái Bình Dương"], expl:"Gió Tây Nam giữa và cuối mùa hạ xuất phát từ áp cao Cận chí tuyến Bắc Cận Bắc ở Nam bán cầu."},
+  {q:"Đặc điểm nhiệt đới ẩm gió mùa của địa hình Việt Nam là gì?", a:"Địa hình cácxtơ và quá trình phong hóa, xâm thực – bồi tụ mạnh", opts:["Địa hình cácxtơ và quá trình phong hóa, xâm thực – bồi tụ mạnh","Chủ yếu là đồng bằng","Nhiều núi cao trên 3000m","Địa hình bằng phẳng"], expl:"Biểu hiện nhiệt đới ẩm gió mùa của địa hình: địa hình cácxtơ và quá trình phong hóa, xâm thực – bồi tụ."},
+  {q:"Tính chất nhiệt đới ẩm gió mùa của đất Việt Nam thể hiện qua quá trình nào?", a:"Quá trình feralit hóa là chủ đạo, đất feralit là chủ yếu", opts:["Quá trình feralit hóa là chủ đạo, đất feralit là chủ yếu","Quá trình mùn hóa, đất đen màu mỡ","Quá trình sa mạc hóa","Đất phù sa bằng phẳng"], expl:"Quá trình feralit hình thành đất đỏ vàng (do tích tụ oxit sắt, nhôm) là chủ đạo ở Việt Nam."},
+  {q:"Thiên tai nào phổ biến nhất ở Việt Nam do vị trí địa lý?", a:"Bão, lũ lụt, hạn hán, xâm nhập mặn, biến đổi khí hậu", opts:["Bão, lũ lụt, hạn hán, xâm nhập mặn, biến đổi khí hậu","Động đất, sóng thần","Núi lửa phun","Lốc xoáy nhiệt đới"], expl:"Do vị trí địa lý, Việt Nam thường xuyên chịu bão, lũ lụt, hạn hán, xâm nhập mặn và tác động biến đổi khí hậu."},
+  {q:"Sông ngòi Việt Nam ít sông lớn vì nguyên nhân gì?", a:"Lãnh thổ hẹp ngang", opts:["Lãnh thổ hẹp ngang","Ít mưa","Địa hình bằng phẳng","Thiếu nguồn nước"], expl:"Lãnh thổ Việt Nam hẹp ngang nên không có sông lớn chảy dọc; sông ngòi ngắn và dốc."},
+  {q:"Tại sao mạng lưới sông ngòi Việt Nam dày đặc?", a:"Mưa lớn kết hợp địa hình bị cắt xẻ mạnh", opts:["Mưa lớn kết hợp địa hình bị cắt xẻ mạnh","Diện tích lãnh thổ lớn","Địa hình bằng phẳng","Có nhiều hồ tự nhiên"], expl:"Mạng lưới sông ngòi dày đặc do mưa lớn, nhiều, kết hợp địa hình đồi núi bị cắt xẻ mạnh."},
+  {q:"Khi lên cao 100m, nhiệt độ thay đổi như thế nào?", a:"Giảm 0,6°C", opts:["Giảm 0,6°C","Tăng 0,6°C","Giảm 1°C","Giảm 0,3°C"], expl:"Khi lên cao 100m, nhiệt độ giảm 0,6°C (đây là tỉ lệ bình quân theo quy tắc địa nhiệt)."},
+  {q:"Khi xuống thấp 100m, nhiệt độ tăng bao nhiêu?", a:"Tăng 1°C", opts:["Tăng 1°C","Tăng 0,6°C","Tăng 0,3°C","Giảm 1°C"], expl:"Khi xuống thấp 100m, nhiệt độ tăng thêm 1°C (quy luật phơn – gió khô nóng)."},
+],
+"Dân cư & Đô thị hóa": [
+  {q:"Mật độ dân số được tính bằng công thức nào?", a:"Dân số / Diện tích (người/km²)", opts:["Dân số / Diện tích (người/km²)","Diện tích / Dân số","Dân số × Diện tích","Dân số / GDP"], expl:"Mật độ dân số = Dân số ÷ Diện tích, đơn vị: người/km²."},
+  {q:"Tỉ suất sinh thô được tính bằng công thức nào?", a:"(Số người sinh ra / Tổng số dân) × 1000 (‰)", opts:["(Số người sinh ra / Tổng số dân) × 1000 (‰)","(Số người chết / Tổng số dân) × 1000","Số sinh - Số chết","Số sinh / Số chết"], expl:"Tỉ suất sinh thô = (Số sinh / Tổng dân số) × 1000, đơn vị ‰."},
+  {q:"Tỉ lệ gia tăng dân số tự nhiên được tính thế nào?", a:"(Tỉ suất sinh – Tỉ suất tử) / 10 (%)", opts:["(Tỉ suất sinh – Tỉ suất tử) / 10 (%)","Tỉ suất sinh – Tỉ suất tử (‰)","(Tỉ suất sinh + Tỉ suất tử) / 10","Tỉ suất sinh × Tỉ suất tử / 100"], expl:"GTDS tự nhiên (%) = (Tỉ suất sinh – Tỉ suất tử) ÷ 10."},
+  {q:"Tỉ lệ gia tăng dân số cơ học được tính thế nào?", a:"(Tỉ suất nhập cư – Tỉ suất xuất cư) / 10 (%)", opts:["(Tỉ suất nhập cư – Tỉ suất xuất cư) / 10 (%)","Tỉ suất nhập cư + Tỉ suất xuất cư","Số nhập cư – Số xuất cư","Tỉ suất xuất cư – Tỉ suất nhập cư"], expl:"GTDS cơ học (%) = (Tỉ suất nhập cư – Tỉ suất xuất cư) ÷ 10."},
+  {q:"Tỉ lệ gia tăng dân số tổng được tính bằng gì?", a:"Gia tăng tự nhiên + Gia tăng cơ học", opts:["Gia tăng tự nhiên + Gia tăng cơ học","Gia tăng tự nhiên – Gia tăng cơ học","Gia tăng tự nhiên × Gia tăng cơ học","Chỉ cần gia tăng tự nhiên"], expl:"GTDS = GTDS tự nhiên + GTDS cơ học."},
+  {q:"Tỉ số giới tính được tính bằng gì?", a:"(Dân số nam / Dân số nữ) × 100 (%)", opts:["(Dân số nam / Dân số nữ) × 100 (%)","(Dân số nữ / Dân số nam) × 100","Dân số nam – Dân số nữ","Dân số nam + Dân số nữ"], expl:"Tỉ số giới tính = (Tổng nam / Tổng nữ) × 100."},
+  {q:"Tỉ lệ dân thành thị được tính thế nào?", a:"(Dân thành thị / Tổng số dân) × 100 (%)", opts:["(Dân thành thị / Tổng số dân) × 100 (%)","Dân thành thị / Diện tích đô thị","Tổng số dân / Số đô thị","Tốc độ tăng dân thành thị"], expl:"Tỉ lệ dân thành thị (%) = (Dân thành thị ÷ Tổng dân) × 100."},
+],
+"Nông – Lâm – Ngư nghiệp": [
+  {q:"Sản lượng nông nghiệp được tính bằng công thức nào?", a:"Năng suất × Diện tích", opts:["Năng suất × Diện tích","Diện tích / Năng suất","Sản lượng / Diện tích","Dân số × Lương thực"], expl:"Sản lượng = Năng suất × Diện tích canh tác."},
+  {q:"Năng suất cây trồng được tính bằng công thức nào?", a:"Sản lượng / Diện tích (tấn/ha hoặc tạ/ha)", opts:["Sản lượng / Diện tích (tấn/ha hoặc tạ/ha)","Diện tích × Năng suất","Sản lượng × Diện tích","Sản lượng / Dân số"], expl:"Năng suất = Sản lượng ÷ Diện tích, đơn vị tấn/ha hoặc tạ/ha."},
+  {q:"Lương thực bình quân đầu người được tính thế nào?", a:"Sản lượng lương thực / Tổng số dân (kg/người)", opts:["Sản lượng lương thực / Tổng số dân (kg/người)","Sản lượng × Dân số","Diện tích / Dân số","Năng suất / Dân số"], expl:"Lương thực bình quân đầu người (kg/người) = Sản lượng ÷ Tổng dân số."},
+  {q:"Độ che phủ rừng được tính bằng gì?", a:"(Diện tích rừng / Tổng diện tích đất tự nhiên) × 100 (%)", opts:["(Diện tích rừng / Tổng diện tích đất tự nhiên) × 100 (%)","Diện tích rừng / Dân số","Số cây / Diện tích","Tốc độ trồng rừng hàng năm"], expl:"Độ che phủ rừng (%) = (Diện tích rừng ÷ Tổng diện tích đất tự nhiên) × 100. Lưu ý: 1km² = 100 ha."},
+  {q:"Bình quân đất nông nghiệp đầu người được tính bằng gì?", a:"Diện tích đất nông nghiệp / Tổng số dân (ha/người)", opts:["Diện tích đất nông nghiệp / Tổng số dân (ha/người)","Tổng dân / Diện tích đất nông nghiệp","Sản lượng / Dân số","Diện tích đất tự nhiên / Dân số"], expl:"Bình quân đất nông nghiệp = Diện tích đất NN ÷ Dân số."},
+],
+"Kinh tế & Thương mại": [
+  {q:"GDP bình quân đầu người được tính bằng gì?", a:"GDP / Tổng số dân", opts:["GDP / Tổng số dân","GDP × Dân số","Dân số / GDP","GDP + Xuất khẩu"], expl:"GDP bình quân đầu người = GDP ÷ Tổng số dân."},
+  {q:"Tổng giá trị xuất nhập khẩu được tính thế nào?", a:"Giá trị xuất khẩu + Giá trị nhập khẩu", opts:["Giá trị xuất khẩu + Giá trị nhập khẩu","Giá trị xuất khẩu – Giá trị nhập khẩu","Giá trị xuất khẩu × 2","GDP / 2"], expl:"Tổng XNK = Giá trị XK + Giá trị NK (đơn vị: Tỉ USD)."},
+  {q:"Cán cân xuất nhập khẩu được tính thế nào?", a:"Giá trị xuất khẩu – Giá trị nhập khẩu", opts:["Giá trị xuất khẩu – Giá trị nhập khẩu","Giá trị xuất khẩu + Giá trị nhập khẩu","Nhập khẩu – Xuất khẩu","GDP – Nhập khẩu"], expl:"Cán cân XNK = Giá trị XK – Giá trị NK (dương là xuất siêu, âm là nhập siêu)."},
+  {q:"Tỉ lệ xuất khẩu trong tổng kim ngạch XNK là gì?", a:"(Giá trị XK / Tổng XNK) × 100 (%)", opts:["(Giá trị XK / Tổng XNK) × 100 (%)","Giá trị XK / GDP","XK / NK × 100","Tổng XNK / XK"], expl:"Tỉ lệ (tỉ trọng) xuất khẩu (%) = (Giá trị XK ÷ Tổng XNK) × 100."},
+  {q:"Chi tiêu bình quân khách du lịch được tính bằng gì?", a:"Doanh thu du lịch / Tổng số khách (USD/người)", opts:["Doanh thu du lịch / Tổng số khách (USD/người)","Tổng khách / Doanh thu","Doanh thu × Khách","GDP / Khách du lịch"], expl:"Chi tiêu bình quân = Doanh thu du lịch ÷ Tổng số khách du lịch (USD/người)."},
+  {q:"Cự li vận chuyển trung bình được tính bằng gì?", a:"Khối lượng luân chuyển (tấn.km) / Khối lượng vận chuyển (tấn)", opts:["Khối lượng luân chuyển (tấn.km) / Khối lượng vận chuyển (tấn)","Khối lượng vận chuyển / Cự li","Tổng km / Số chuyến","Cự li × Vận chuyển"], expl:"Cự li vận chuyển trung bình (km) = Khối lượng luân chuyển ÷ Khối lượng vận chuyển."},
+],
+"Biểu đồ & Kỹ năng": [
+  {q:"Chọn biểu đồ TRÒN khi nào?", a:"Thể hiện 'cơ cấu', 'tỉ trọng', 'tỉ lệ' với từ 3 năm trở xuống", opts:["Thể hiện 'cơ cấu', 'tỉ trọng', 'tỉ lệ' với từ 3 năm trở xuống","Tốc độ tăng trưởng, nhiều năm","Sự thay đổi quy mô theo thời gian","2 đơn vị khác nhau, nhiều năm"], expl:"Biểu đồ TRÒN: thể hiện cơ cấu/tỉ trọng/tỉ lệ với tối đa 3 năm."},
+  {q:"Chọn biểu đồ MIỀN khi nào?", a:"Thể hiện 'cơ cấu', 'tỉ trọng', 'tỉ lệ' với từ 4 năm trở lên", opts:["Thể hiện 'cơ cấu', 'tỉ trọng', 'tỉ lệ' với từ 4 năm trở lên","Tốc độ tăng trưởng","Quy mô và cơ cấu","2 đơn vị khác nhau"], expl:"Biểu đồ MIỀN: cơ cấu/tỉ trọng từ 4 năm trở lên. Lưu ý: không thể thay đổi quy mô."},
+  {q:"Chọn biểu đồ ĐƯỜNG khi nào?", a:"Tốc độ tăng trưởng, sự gia tăng, sự biến động — nhiều năm", opts:["Tốc độ tăng trưởng, sự gia tăng, sự biến động — nhiều năm","Cơ cấu, tỉ trọng","1 đơn vị, ít năm","Quy mô và cơ cấu"], expl:"Biểu đồ ĐƯỜNG: thể hiện tốc độ tăng trưởng/sự biến động theo nhiều năm. Không thể hiện cơ cấu/tỉ trọng."},
+  {q:"Chọn biểu đồ CỘT khi nào?", a:"Không có từ khóa đặc biệt + 1 đơn vị (hoặc 2 đơn vị nhưng ít năm)", opts:["Không có từ khóa đặc biệt + 1 đơn vị (hoặc 2 đơn vị nhưng ít năm)","Cơ cấu, tỉ trọng, nhiều năm","Tốc độ tăng trưởng dài hạn","Luôn khi có nhiều năm"], expl:"Biểu đồ CỘT: không có từ khóa riêng + 1 đơn vị, hoặc 2 đơn vị nhưng ít năm."},
+  {q:"Chọn biểu đồ KẾT HỢP khi nào?", a:"Không có từ khóa + 2 đơn vị khác nhau + nhiều năm", opts:["Không có từ khóa + 2 đơn vị khác nhau + nhiều năm","Chỉ 1 yếu tố, 1 đơn vị","Cơ cấu, tỉ trọng","Tốc độ tăng trưởng, 1 đơn vị"], expl:"Biểu đồ KẾT HỢP: không có từ khóa đặc biệt + 2 đơn vị + nhiều năm. Nếu ít năm thì chọn cột."},
+  {q:"Biểu đồ nào KHÔNG thể hiện được cơ cấu và tỉ trọng?", a:"Biểu đồ đường", opts:["Biểu đồ đường","Biểu đồ tròn","Biểu đồ miền","Biểu đồ cột"], expl:"Biểu đồ đường không thể hiện được cơ cấu và tỉ trọng — chỉ thể hiện xu hướng/tốc độ thay đổi."},
+  {q:"Biểu đồ miền KHÔNG thể hiện được điều gì?", a:"Sự thay đổi quy mô", opts:["Sự thay đổi quy mô","Cơ cấu theo thời gian","Tỉ trọng các thành phần","Xu hướng thay đổi cơ cấu"], expl:"Biểu đồ miền chỉ thể hiện cơ cấu/tỉ trọng, không thể hiện được sự thay đổi quy mô."},
+  {q:"Cột đơn trong biểu đồ kết hợp dùng khi nào?", a:"Bảng số liệu có 1 yếu tố cột + 1 yếu tố đường", opts:["Bảng số liệu có 1 yếu tố cột + 1 yếu tố đường","Bảng có 2–3 yếu tố ngang nhau + đường","Bảng có yếu tố Tổng và thành phần","Bảng có 1 đơn vị"], expl:"Cột đơn + đường: 1 yếu tố cột, 1 yếu tố đường. Cột ghép + đường: 2–3 yếu tố ngang nhau + đường."},
+]
+};
+
+// Flashcard data (thẻ ghi nhớ)
+const FLASH_DATA = {
+"Mốc thời gian LS Thế giới": [
+  {front:"1914-1918", back:"Chiến tranh thế giới thứ nhất"},
+  {front:"1917", back:"Cách mạng tháng Hai & tháng Mười ở Nga"},
+  {front:"1939-1945", back:"Chiến tranh thế giới thứ hai"},
+  {front:"1945", back:"Liên hợp quốc thành lập"},
+  {front:"1947-1989", back:"Chiến tranh Lạnh"},
+  {front:"1967", back:"ASEAN ra đời (Tuyên bố Băng Cốc)"},
+  {front:"1991", back:"Liên Xô tan rã — chấm dứt Trật tự hai cực"},
+  {front:"2015", back:"Cộng đồng ASEAN thành lập (3 trụ cột)"},
+],
+"Địa lý Việt Nam": [
+  {front:"Diện tích đất liền VN", back:"Hơn 331 nghìn km²"},
+  {front:"Đường bờ biển", back:"3260 km (Quảng Ninh → Kiên Giang)"},
+  {front:"Vùng biển VN", back:"Khoảng 1 triệu km² (gấp 3 lần đất liền)"},
+  {front:"Đường biên giới đất liền", back:"Hơn 4600 km (dài nhất với Lào)"},
+  {front:"Cực Bắc", back:"Xã Lũng Cú, Hà Giang"},
+  {front:"Cực Nam", back:"Xã Đất Mũi, Cà Mau"},
+  {front:"Cực Tây", back:"Xã Sín Thầu, Điện Biên"},
+  {front:"Cực Đông", back:"Xã Đại Lãnh, Khánh Hòa"},
+  {front:"Đảo lớn nhất", back:"Phú Quốc (Kiên Giang)"},
+  {front:"Ranh giới Bắc-Nam", back:"Dãy núi Bạch Mã (16°B)"},
+  {front:"Lãnh hải rộng", back:"12 hải lý"},
+  {front:"Vùng ĐQ kinh tế rộng", back:"200 hải lý"},
+  {front:"Số bộ phận vùng biển", back:"5 bộ phận"},
+],
+"Công thức quan trọng": [
+  {front:"Mật độ dân số", back:"Dân số ÷ Diện tích (người/km²)"},
+  {front:"Tỉ suất sinh thô", back:"(Số sinh ÷ Tổng dân) × 1000 (‰)"},
+  {front:"Tăng tự nhiên (%)", back:"(Sinh thô – Tử thô) ÷ 10"},
+  {front:"Tăng cơ học (%)", back:"(Nhập cư – Xuất cư) ÷ 10"},
+  {front:"Năng suất", back:"Sản lượng ÷ Diện tích (tấn/ha)"},
+  {front:"Sản lượng", back:"Năng suất × Diện tích"},
+  {front:"GDP bình quân đầu người", back:"GDP ÷ Tổng dân số"},
+  {front:"Độ che phủ rừng", back:"(Diện tích rừng ÷ Đất tự nhiên) × 100 (%)"},
+  {front:"Cán cân XNK", back:"Xuất khẩu – Nhập khẩu"},
+  {front:"Tổng kim ngạch XNK", back:"Xuất khẩu + Nhập khẩu"},
+]
+};
+
+// Formula data
+const FORMULAS = {
+tn: [
+  {name:"Cân bằng ẩm", expr:"Lượng mưa − Lượng bốc hơi", unit:"mm"},
+  {name:"Tổng lượng mưa năm", expr:"Tổng lượng mưa 12 tháng", unit:"mm"},
+  {name:"Lượng mưa TB năm", expr:"Tổng lượng mưa 12 tháng ÷ 12", unit:"mm"},
+  {name:"Biên độ nhiệt", expr:"Nhiệt độ cao nhất − Nhiệt độ thấp nhất", unit:"°C"},
+  {name:"Nhiệt độ TB năm", expr:"Tổng nhiệt độ 12 tháng ÷ 12", unit:"°C"},
+  {name:"Độ che phủ rừng", expr:"(Diện tích rừng ÷ Tổng DT đất tự nhiên) × 100\n[1 km² = 100 ha]", unit:"%"},
+  {name:"Diện tích rừng", expr:"Độ che phủ × Tổng DT đất tự nhiên ÷ 100", unit:"ha"},
+  {name:"Tỉ lệ đất các loại", expr:"(Diện tích loại đất ÷ Tổng DT đất tự nhiên) × 100", unit:"%"},
+  {name:"Nhiệt độ khi LÊN cao", expr:"Nhiệt độ chân núi − (Khoảng cách × 0,6 ÷ 100)\n[Lên 100m: giảm 0,6°C]", unit:"°C"},
+  {name:"Nhiệt độ khi XUỐNG thấp", expr:"Nhiệt độ đỉnh núi + (Khoảng cách ÷ 100)\n[Xuống 100m: tăng 1°C]", unit:"°C"},
+  {name:"Tính giờ (Bán cầu Đông)", expr:"Giờ GMT + Số múi giờ", unit:"Giờ"},
+  {name:"Khoảng cách trên bản đồ", expr:"Khoảng cách thật ÷ Mẫu số tỉ lệ bản đồ", unit:"cm"},
+  {name:"Khoảng cách thực tế", expr:"Khoảng cách bản đồ × Mẫu số tỉ lệ bản đồ", unit:"km"},
+],
+dc: [
+  {name:"Mật độ dân số", expr:"Dân số ÷ Diện tích", unit:"người/km²"},
+  {name:"Số dân", expr:"Diện tích × Mật độ dân số", unit:"người"},
+  {name:"Tỉ suất sinh thô", expr:"(Số người sinh ra ÷ Tổng dân) × 1000", unit:"‰"},
+  {name:"Tỉ suất tử thô", expr:"(Số người chết ÷ Tổng dân) × 1000", unit:"‰"},
+  {name:"GTDS tự nhiên", expr:"(Tỉ suất sinh − Tỉ suất tử) ÷ 10", unit:"%"},
+  {name:"Tỉ suất xuất cư", expr:"(Số người xuất cư ÷ Tổng dân) × 1000", unit:"‰"},
+  {name:"Tỉ suất nhập cư", expr:"(Số người nhập cư ÷ Tổng dân) × 1000", unit:"‰"},
+  {name:"GTDS cơ học", expr:"(Tỉ suất nhập cư − Tỉ suất xuất cư) ÷ 10", unit:"%"},
+  {name:"GTDS tổng", expr:"GTDS tự nhiên + GTDS cơ học", unit:"%"},
+  {name:"Tỉ số giới tính", expr:"(Tổng dân số nam ÷ Tổng dân số nữ) × 100", unit:"%"},
+  {name:"Tỉ lệ dân thành thị", expr:"(Dân thành thị ÷ Tổng dân) × 100", unit:"%"},
+  {name:"Tỉ lệ dân số phụ thuộc", expr:"(Số người không tham gia LĐ ÷ Tổng dân) × 100", unit:"%"},
+],
+kt: [
+  {name:"GDP bình quân đầu người", expr:"GDP ÷ Tổng số dân", unit:"USD/người"},
+  {name:"Sản lượng", expr:"Năng suất × Diện tích", unit:"nghìn tấn"},
+  {name:"Năng suất", expr:"Sản lượng ÷ Diện tích", unit:"tấn, tạ/ha"},
+  {name:"Diện tích canh tác", expr:"Sản lượng ÷ Năng suất", unit:"ha"},
+  {name:"Lương thực bình quân đầu người", expr:"Sản lượng ÷ Tổng số dân", unit:"kg/người"},
+  {name:"Bình quân đất nông nghiệp", expr:"Diện tích đất NN ÷ Tổng số dân", unit:"ha/người"},
+  {name:"Tổng kim ngạch XNK", expr:"Giá trị xuất khẩu + Giá trị nhập khẩu", unit:"Tỉ USD"},
+  {name:"Cán cân XNK", expr:"Giá trị xuất khẩu − Giá trị nhập khẩu", unit:"Tỉ USD"},
+  {name:"Tỉ lệ xuất khẩu", expr:"(Giá trị XK ÷ Tổng XNK) × 100", unit:"%"},
+  {name:"Chi tiêu bình quân du khách", expr:"Doanh thu du lịch ÷ Tổng số khách", unit:"USD/người"},
+  {name:"Cự li vận chuyển TB", expr:"Khối lượng luân chuyển (tấn.km) ÷ KL vận chuyển (tấn)", unit:"km"},
+  {name:"Khối lượng luân chuyển", expr:"Cự li vận chuyển TB × Khối lượng vận chuyển", unit:"tấn.km"},
+],
+bd: [
+  {name:"Biểu đồ TRÒN", expr:"→ Từ khoá: 'cơ cấu', 'tỉ trọng', 'tỉ lệ'\n→ Điều kiện: ≤ 3 năm", unit:"Cơ cấu"},
+  {name:"Biểu đồ MIỀN", expr:"→ Từ khoá: 'cơ cấu', 'tỉ trọng', 'tỉ lệ'\n→ Điều kiện: ≥ 4 năm\n⚠️ Không thể hiện quy mô", unit:"Cơ cấu"},
+  {name:"Biểu đồ ĐƯỜNG", expr:"→ Từ khoá: 'tốc độ tăng trưởng', 'sự gia tăng', 'sự biến động'\n→ Nhiều năm\n⚠️ Không thể hiện cơ cấu/tỉ trọng", unit:"Xu hướng"},
+  {name:"Biểu đồ CỘT", expr:"→ Không có từ khoá đặc biệt\n→ 1 đơn vị (hoặc 2 đơn vị nhưng ít năm)\n• Cột đơn: 1 yếu tố\n• Cột ghép: 2–3 yếu tố ngang nhau\n• Cột chồng: có Tổng + trong đó", unit:"Quy mô"},
+  {name:"Biểu đồ KẾT HỢP", expr:"→ Không có từ khoá đặc biệt + 2 đơn vị + NHIỀU NĂM\n→ Ít năm → chọn cột\n→ Hoặc: 1 từ khoá đường + 2 đơn vị + nhiều năm\n• Cột đơn + đường: 1 cột + 1 đường\n• Cột ghép + đường: 2–3 cột + 1 đường\n• Cột chồng + đường: Tổng/trong đó + 1 đường", unit:"Kết hợp"},
+]
+};
+
+// ════════════════════════════════════════
+//  STATE & STORAGE
+// ════════════════════════════════════════
+const SK = 'dia12_v2';
+let user = null;
+let S = {
+  mode:'quiz', topics:Object.keys(DATA), count:9999,
+  qs:[], cur:0, ans:[], t0:0,
+  ok:0, no:0, sk:0,
+  rpQ:[], rpDone:0, rpTotal:0, rpMM:{}, rpOk:0, rpNo:0, rpAns:false,
+  fc:[], fcIdx:0, fcKn:new Set(), fcUn:new Set(), _fcFlip:false
+};
+
+function getRecs(){ try{return JSON.parse(localStorage.getItem(SK))||[];}catch{return[];} }
+function saveRec(r){ const rs=getRecs(); rs.push(r); localStorage.setItem(SK,JSON.stringify(rs)); }
+function loadStats(nm){
+  const rs=getRecs().filter(r=>r.name===nm);
+  return{ sessions:rs.length, avgScore: rs.length?rs.reduce((s,r)=>s+(r.score10||0),0)/rs.length:0 };
+}
+function refreshUser(){
+  if(!user) return;
+  const st=loadStats(user.name);
+  user.sessions=st.sessions; user.avgScore=st.avgScore;
+  updateHdr();
+}
+
+const SESS_K='dia12_sess';
+function saveSession(nm){ localStorage.setItem(SESS_K,nm); }
+function clearSession(){ localStorage.removeItem(SESS_K); }
+function getSaved(){ return localStorage.getItem(SESS_K)||null; }
+
+// ════════════════════════════════════════
+//  AUTH
+// ════════════════════════════════════════
+function doLogin(){
+  const nm=document.getElementById('loginName').value.trim();
+  const err=document.getElementById('loginErr');
+  if(!nm){ err.style.display='block'; return; }
+  err.style.display='none';
+  enterApp(nm);
+}
+function enterApp(nm){
+  const st=loadStats(nm);
+  user={name:nm,...st};
+  saveSession(nm);
+  document.getElementById('loginPage').style.display='none';
+  document.getElementById('hdr').style.display='flex';
+  document.getElementById('appWrap').style.display='block';
+  updateHdr(); renderGreeting(); show('sHome');
+}
+function logout(){
+  document.getElementById('logoutNm').textContent=user.name;
+  document.getElementById('logoutModal').classList.add('open');
+}
+function confirmLogout(){
+  closeModal('logoutModal'); clearSession(); hideStickyBar();
+  user=null;
+  document.getElementById('hdr').style.display='none';
+  document.getElementById('appWrap').style.display='none';
+  document.getElementById('loginPage').style.display='';
+  document.getElementById('loginName').value='';
+}
+function updateHdr(){
+  if(!user) return;
+  document.getElementById('hdrAv').textContent=user.name[0].toUpperCase();
+  document.getElementById('hdrName').textContent=user.name;
+}
+function renderGreeting(){
+  if(!user) return;
+  document.getElementById('grAv').textContent=user.name[0].toUpperCase();
+  document.getElementById('grName').textContent='Xin chào, '+user.name+'! 👋';
+  document.getElementById('grSub').textContent=user.sessions>0?`Bạn đã làm ${user.sessions} lần. Tiếp tục cố gắng!`:'Lần đầu học? Bắt đầu nào!';
+  document.getElementById('grSess').textContent=user.sessions;
+}
+
+// ════════════════════════════════════════
+//  MODAL & SHEET
+// ════════════════════════════════════════
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+function openSheet(){ document.getElementById('startSheet').classList.add('open'); }
+
+function initTopics(){
+  const box=document.getElementById('topicBox');
+  const keys=Object.keys(DATA);
+  box.innerHTML=keys.map((t,i)=>
+    `<button class="topic-pill on" id="tp_${i}" data-t="${i}">${t}<span style="opacity:.5;font-size:10px;margin-left:4px">(${DATA[t].length})</span></button>`
+  ).join('');
+  box.addEventListener('click',e=>{
+    const b=e.target.closest('.topic-pill'); if(!b) return;
+    e.stopPropagation();
+    const t=keys[parseInt(b.dataset.t)];
+    if(S.topics.includes(t)){ S.topics=S.topics.filter(x=>x!==t); b.classList.remove('on'); }
+    else { S.topics.push(t); b.classList.add('on'); }
+  });
+}
+function pickCnt(n,btn){
+  S.count=n;
+  document.querySelectorAll('.cnt-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+}
+function pickMode(m,el){
+  S.mode=m;
+  document.querySelectorAll('.mode-card').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+// ════════════════════════════════════════
+//  NAVIGATION
+// ════════════════════════════════════════
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function goHome(){
+  const a=document.querySelector('.screen.active');
+  if(a&&['sQuiz','sRepeat'].includes(a.id)){
+    document.getElementById('exitModal').classList.add('open');
+  } else doGoHome();
+}
+function doGoHome(){ hideStickyBar(); refreshUser(); renderGreeting(); show('sHome'); }
+function confirmHome(){ closeModal('exitModal'); doGoHome(); }
+
+// Sticky bar
+function hideStickyBar(){ document.getElementById('stickyBar').style.display='none'; }
+function showStickyBar(html){
+  document.getElementById('stickyBar').style.display='block';
+  document.getElementById('stickyInner').innerHTML=html;
+}
+function setStickyWaiting(){
+  showStickyBar(`<button class="btn-home-f" onclick="goHome()">🏠</button>
+    <button class="btn-skip-f" onclick="skipCur()">⏭ Bỏ qua</button>
+    <button class="btn-next-f" disabled>Chọn đáp án →</button>`);
+}
+function setStickyNext(lbl){
+  const aid=document.querySelector('.screen.active')?.id||'';
+  const fn=aid==='sQuiz'?'nextQ()':aid==='sRepeat'?'nextRp()':'nextType()';
+  showStickyBar(`<button class="btn-home-f" onclick="goHome()">🏠</button>
+    <button class="btn-next-f" onclick="${fn}">${lbl||'Tiếp theo →'}</button>`);
+}
+function setStickyCheck(){
+  showStickyBar(`<button class="btn-home-f" onclick="goHome()">🏠</button>
+    <button class="btn-skip-f" onclick="skipType()">⏭ Bỏ qua</button>
+    <button class="btn-check-f" onclick="checkType()">✓ Kiểm tra</button>`);
+}
+function skipCur(){
+  const id=document.querySelector('.screen.active')?.id;
+  if(id==='sQuiz') skipQ(); else if(id==='sRepeat') skipRp();
+}
+
+// ════════════════════════════════════════
+//  HELPERS
+// ════════════════════════════════════════
+function pool(){ return S.topics.flatMap(t=>DATA[t].map((d,i)=>({...d,topic:t,_id:t+'_'+i}))); }
+function shuffle(a){ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a; }
+function ls10(ok,tot){ return tot>0?(ok/tot*10).toFixed(1):'0.0'; }
+function calcScore(ok,tot){ return tot>0?Math.round(ok/tot*100)/10:0; }
+
+function go(){
+  document.getElementById('startSheet').classList.remove('open');
+  if(!S.topics.length){alert('Vui lòng chọn ít nhất 1 chủ đề!');return;}
+  const p=pool(); S.t0=Date.now(); S.cur=0; S.ans=[];
+  S.ok=0; S.no=0; S.sk=0;
+  if(S.mode==='quiz'){ S.qs=buildQ(p); show('sQuiz'); renderQ(); }
+  else if(S.mode==='repeat'){
+    const base=buildQ(p);
+    S.rpQ=[...base]; S.rpDone=0; S.rpTotal=base.length;
+    S.rpMM={}; S.rpOk=0; S.rpNo=0; S.rpAns=false;
+    show('sRepeat'); renderRp();
+  }
+  else if(S.mode==='flash'){
+    S.fc=shuffle(buildFC()).slice(0,Math.min(S.count===9999?9999:S.count,9999));
+    S.fcIdx=0; S.fcKn=new Set(); S.fcUn=new Set(); S._fcFlip=false;
+    hideStickyBar(); show('sFlash'); renderFC();
+  }
+  else if(S.mode==='formula'){
+    hideStickyBar(); show('sFormula'); renderFormulas('tn');
+  }
+}
+function buildQ(p){
+  return shuffle([...p]).slice(0,Math.min(S.count,p.length)).map(item=>({
+    q:item.q, opts:shuffle([...item.opts]), correct:item.a,
+    topic:item.topic, expl:item.expl
+  }));
+}
+function buildFC(){
+  const res=[];
+  for(const [grp, items] of Object.entries(FLASH_DATA)){
+    items.forEach(it=>res.push({...it, group:grp}));
+  }
+  return res;
+}
+
+// ════════════════════════════════════════
+//  QUIZ
+// ════════════════════════════════════════
+function renderQ(){
+  const q=S.qs[S.cur], n=S.qs.length;
+  document.getElementById('qCur').textContent=S.cur+1;
+  document.getElementById('qTot').textContent=n;
+  document.getElementById('qPbar').style.width=(S.cur/n*100)+'%';
+  document.getElementById('qNum').textContent='Câu '+(S.cur+1);
+  document.getElementById('qText').innerHTML=q.q;
+  document.getElementById('qTag').textContent=q.topic;
+  document.getElementById('qExpl').className='expl';
+  document.getElementById('qBanner').innerHTML='';
+  document.getElementById('qCard').className='q-card';
+  updateQLive(); renderDots('qDots',n);
+  const L=['A','B','C','D'];
+  document.getElementById('qOpts').innerHTML=q.opts.map((o,i)=>
+    `<button class="opt" onclick="pickQ(${i},this)">
+      <div class="opt-lbl">${L[i]}</div>
+      <div class="opt-body"><div>${o}</div><div class="opt-sub"></div></div>
+    </button>`
+  ).join('');
+  setStickyWaiting();
+  document.getElementById('qCard').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function updateQLive(){
+  const ans=S.ok+S.no+S.sk;
+  document.getElementById('qOk').textContent=S.ok;
+  document.getElementById('qNo').textContent=S.no;
+  document.getElementById('qSk').textContent=S.sk;
+  document.getElementById('qScore').textContent=ans?ls10(S.ok,ans):'0.0';
+}
+function renderDots(id,n){
+  document.getElementById(id).innerHTML=Array.from({length:n},(_,i)=>{
+    const a=S.ans[i]; let c='';
+    if(i===S.cur) c='cur';
+    else if(!a) c='';
+    else if(a.skip) c='sk';
+    else if(a.chose===a.correct) c='ok';
+    else c='no';
+    return`<div class="dot ${c}"></div>`;
+  }).join('');
+}
+function pickQ(idx,btn){
+  if(S.ans[S.cur]) return;
+  const q=S.qs[S.cur], chose=q.opts[idx], ok=chose===q.correct;
+  if(ok) S.ok++; else S.no++;
+  S.ans[S.cur]={chose,correct:q.correct,skip:false};
+  hlOpts('qOpts',q.opts,q.correct,idx);
+  showBanner('qBanner',ok,chose,q.correct,false);
+  document.getElementById('qCard').className='q-card '+(ok?'glow-ok':'glow-no');
+  showExpl('qExpl',q.expl);
+  updateQLive(); renderDots('qDots',S.qs.length);
+  setStickyNext(S.cur+1>=S.qs.length?'Xem kết quả 🎉':'Câu tiếp theo →');
+  scrollBanner();
+}
+function skipQ(){
+  const q=S.qs[S.cur]; S.sk++;
+  S.ans[S.cur]={chose:null,correct:q.correct,skip:true};
+  hlOpts('qOpts',q.opts,q.correct,-1);
+  showBanner('qBanner',false,null,q.correct,true);
+  showExpl('qExpl',q.expl);
+  updateQLive(); renderDots('qDots',S.qs.length);
+  setStickyNext(S.cur+1>=S.qs.length?'Xem kết quả 🎉':'Câu tiếp theo →');
+  scrollBanner();
+}
+function nextQ(){ if(S.cur+1>=S.qs.length) showResult('quiz'); else{S.cur++;renderQ();} }
+
+// ════════════════════════════════════════
+//  REPEAT
+// ════════════════════════════════════════
+function renderRp(){
+  if(!S.rpQ.length){showResult('repeat');return;}
+  const q=S.rpQ[0], done=S.rpDone, n=done+S.rpQ.length;
+  document.getElementById('rpQ').textContent=S.rpQ.length;
+  document.getElementById('rpPbar').style.width=(done/n*100)+'%';
+  document.getElementById('rpNum').textContent='Câu '+(done+1);
+  document.getElementById('rpText').innerHTML=q.q;
+  document.getElementById('rpTag').textContent=q.topic;
+  document.getElementById('rpExpl').className='expl';
+  document.getElementById('rpBanner').innerHTML='';
+  document.getElementById('rpCard').className='q-card';
+  S.rpAns=false;
+  updateRpLive();
+  const mc=S.rpMM[q._id||'']||0;
+  const repT=document.getElementById('rpRepTag');
+  const cb=document.getElementById('rpComebackNotice');
+  if(mc>0){
+    repT.style.display=''; repT.textContent='🔄 Lần lặp '+mc;
+    cb.innerHTML=`<div class="comeback">🔁 Bạn đã sai câu này ${mc} lần — đây là lần ôn lại!</div>`;
+  } else { repT.style.display='none'; cb.innerHTML=''; }
+  const newC=S.rpQ.filter(x=>!(S.rpMM[x._id||'']>0)).length;
+  const revC=S.rpQ.filter(x=>S.rpMM[x._id||'']>0).length;
+  document.getElementById('rpInfoBar').innerHTML=
+    `<div class="rep-chip" style="background:var(--sky-bg);color:var(--sky);border:1px solid var(--sky-border)">📋 ${newC} câu mới</div>`+
+    (revC?`<div class="rep-chip" style="background:var(--violet-bg);color:var(--violet);border:1px solid var(--violet-border)">🔁 ${revC} câu ôn lại</div>`:'')+
+    `<div class="rep-chip" style="background:var(--emerald-bg);color:var(--emerald);border:1px solid var(--emerald-border)">✅ ${done} xong</div>`;
+  const L=['A','B','C','D'];
+  document.getElementById('rpOpts').innerHTML=q.opts.map((o,i)=>
+    `<button class="opt" onclick="pickRp(${i},this)">
+      <div class="opt-lbl">${L[i]}</div>
+      <div class="opt-body"><div>${o}</div><div class="opt-sub"></div></div>
+    </button>`
+  ).join('');
+  setStickyWaiting();
+  document.getElementById('rpCard').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function updateRpLive(){
+  const ans=S.rpOk+S.rpNo;
+  document.getElementById('rpOk').textContent=S.rpOk;
+  document.getElementById('rpNo').textContent=S.rpNo;
+  document.getElementById('rpDone').textContent=S.rpDone;
+  document.getElementById('rpScore').textContent=ans?ls10(S.rpOk,ans):'0.0';
+}
+function pickRp(idx,btn){
+  if(S.rpAns) return;
+  S.rpAns=true;
+  const q=S.rpQ[0]; if(!q._id) q._id=Math.random().toString(36).slice(2);
+  const chose=q.opts[idx], ok=chose===q.correct;
+  if(ok) S.rpOk++; else S.rpNo++;
+  hlOpts('rpOpts',q.opts,q.correct,idx);
+  showBanner('rpBanner',ok,chose,q.correct,false);
+  document.getElementById('rpCard').className='q-card '+(ok?'glow-ok':'glow-no');
+  showExpl('rpExpl',q.expl);
+  updateRpLive();
+  if(ok){ S.rpQ.shift(); S.rpDone++; }
+  else {
+    S.rpMM[q._id]=(S.rpMM[q._id]||0)+1;
+    S.rpQ.shift();
+    const at=Math.min(2+Math.floor(Math.random()*2),S.rpQ.length);
+    S.rpQ.splice(at,0,{...q});
+  }
+  setStickyNext(!S.rpQ.length?'Xem kết quả 🎉':'Câu tiếp theo →');
+  scrollBanner();
+}
+function skipRp(){
+  if(S.rpAns) return; S.rpAns=true;
+  const q=S.rpQ[0]; if(!q._id) q._id=Math.random().toString(36).slice(2);
+  S.rpNo++;
+  S.rpMM[q._id]=(S.rpMM[q._id]||0)+1;
+  S.rpQ.shift();
+  const at=Math.min(2+Math.floor(Math.random()*2),S.rpQ.length);
+  S.rpQ.splice(at,0,{...q});
+  hlOpts('rpOpts',q.opts,q.correct,-1);
+  showBanner('rpBanner',false,null,q.correct,true);
+  showExpl('rpExpl',q.expl);
+  updateRpLive();
+  setStickyNext(!S.rpQ.length?'Xem kết quả 🎉':'Câu tiếp theo →');
+  scrollBanner();
+}
+function nextRp(){ renderRp(); }
+
+// ════════════════════════════════════════
+//  SHARED UI
+// ════════════════════════════════════════
+function hlOpts(cid,opts,correct,chosenIdx){
+  document.querySelectorAll('#'+cid+' .opt').forEach((b,i)=>{
+    b.classList.add('dis');
+    const sub=b.querySelector('.opt-sub');
+    if(opts[i]===correct){
+      if(i===chosenIdx){b.classList.add('st-correct');sub.textContent='✅ Chính xác!';}
+      else{b.classList.add('st-answer');sub.textContent='← Đáp án đúng';}
+    } else if(i===chosenIdx){b.classList.add('st-wrong');sub.textContent='❌ Sai rồi!';}
+  });
+}
+function showBanner(cid,ok,chose,correct,skip){
+  let html='';
+  if(skip) html=`<div class="banner skip"><div class="banner-ico">⏭</div><div class="banner-body"><div class="banner-lbl">Đã bỏ qua</div><div class="banner-main" style="color:var(--amber)">Chưa trả lời câu này</div><div class="banner-ans">Đáp án đúng: <strong>${correct}</strong></div></div></div>`;
+  else if(ok) html=`<div class="banner ok"><div class="banner-ico">🎉</div><div class="banner-body"><div class="banner-lbl">Chính xác!</div><div class="banner-main" style="color:var(--emerald)">Bạn đã trả lời đúng!</div></div></div>`;
+  else html=`<div class="banner no"><div class="banner-ico">😔</div><div class="banner-body"><div class="banner-lbl">Chưa đúng</div><div class="banner-main" style="color:var(--rose)">Bạn chọn: <em>${chose||'—'}</em></div><div class="banner-ans">Đáp án đúng: <strong>${correct}</strong></div></div></div>`;
+  document.getElementById(cid).innerHTML=html;
+}
+function showExpl(id,txt){
+  const el=document.getElementById(id);
+  el.innerHTML='💡 '+txt;
+  el.className='expl show';
+}
+function scrollBanner(){
+  setTimeout(()=>{
+    const b=document.querySelector('.banner');
+    if(b) b.scrollIntoView({behavior:'smooth',block:'nearest'});
+  },80);
+}
+
+// ════════════════════════════════════════
+//  FLASHCARD
+// ════════════════════════════════════════
+function renderFC(){
+  const c=S.fc[S.fcIdx];
+  document.getElementById('fcFront').textContent=c.front;
+  document.getElementById('fcBack').textContent=c.back;
+  document.getElementById('fcTopic').textContent=c.group||'';
+  document.getElementById('fcCnt').textContent=(S.fcIdx+1)+' / '+S.fc.length;
+  document.getElementById('fcKn').textContent=S.fcKn.size;
+  document.getElementById('fcUn').textContent=S.fcUn.size;
+  S._fcFlip=false; document.getElementById('fcCard').classList.remove('flip');
+}
+function flipFC(){ S._fcFlip=!S._fcFlip; document.getElementById('fcCard').classList.toggle('flip',S._fcFlip); }
+function fcNext(){ if(S.fcIdx+1<S.fc.length){S.fcIdx++;renderFC();} }
+function fcPrev(){ if(S.fcIdx>0){S.fcIdx--;renderFC();} }
+function fcShuffle(){ S.fc=shuffle([...S.fc]); S.fcIdx=0; renderFC(); }
+function fcMark(t){
+  if(t==='know'){S.fcKn.add(S.fcIdx);S.fcUn.delete(S.fcIdx);}
+  else{S.fcUn.add(S.fcIdx);S.fcKn.delete(S.fcIdx);}
+  document.getElementById('fcKn').textContent=S.fcKn.size;
+  document.getElementById('fcUn').textContent=S.fcUn.size;
+  if(S.fcIdx+1<S.fc.length) fcNext();
+}
+
+// ════════════════════════════════════════
+//  FORMULA
+// ════════════════════════════════════════
+let _curFmTab='tn';
+function pickFormulaTab(tab,btn){
+  _curFmTab=tab;
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  renderFormulas(tab);
+}
+function renderFormulas(tab){
+  const items=FORMULAS[tab]||[];
+  document.getElementById('fmBox').innerHTML=items.map((f,i)=>`
+    <div class="formula-card">
+      <div class="formula-head" onclick="toggleFm(${i})">
+        <div class="formula-name">📐 ${f.name}</div>
+        <div class="formula-unit">${f.unit}</div>
+      </div>
+      <div class="formula-body" id="fm_${i}">
+        <div class="formula-expr">${f.expr.replace(/\n/g,'<br>')}</div>
+      </div>
+    </div>`
+  ).join('');
+}
+function toggleFm(i){
+  const el=document.getElementById('fm_'+i);
+  el.classList.toggle('open');
+}
+
+// ════════════════════════════════════════
+//  RESULT
+// ════════════════════════════════════════
+function showResult(mode){
+  hideStickyBar();
+  const secs=Math.round((Date.now()-S.t0)/1000);
+  let total,ok,no,sk;
+  if(mode==='repeat'){
+    total=S.rpTotal; ok=S.rpOk; no=S.rpNo; sk=0;
+  } else {
+    total=S.qs.length;
+    ok=S.ans.filter(a=>a&&!a.skip&&a.chose===a.correct).length;
+    no=S.ans.filter(a=>a&&!a.skip&&a.chose!==a.correct).length;
+    sk=S.ans.filter(a=>a&&a.skip).length;
+  }
+  const pct=total?Math.round(ok/total*100):0;
+  const s10=calcScore(ok,total).toFixed(1);
+  let ico='😔',ttl='Cần cố gắng thêm!';
+  if(pct>=90){ico='🏆';ttl='Xuất sắc! Tuyệt vời!';}
+  else if(pct>=70){ico='🎉';ttl='Giỏi lắm! Rất tốt!';}
+  else if(pct>=50){ico='💪';ttl='Khá tốt, tiếp tục!';}
+  document.getElementById('resIco').textContent=ico;
+  document.getElementById('resTtl').textContent=ttl;
+  document.getElementById('resSub').textContent=`${user.name} — ${ok}/${total} câu đúng`;
+  document.getElementById('resScore10').textContent=s10;
+  document.getElementById('resScore10').style.color=pct>=70?'var(--emerald)':pct>=50?'var(--amber)':'var(--rose)';
+  document.getElementById('resOk').textContent=ok;
+  document.getElementById('resNo').textContent=no;
+  document.getElementById('resSk').textContent=sk;
+  document.getElementById('resTm').textContent=secs+'s';
+  document.getElementById('ringPct').textContent=pct+'%';
+  document.getElementById('ringPct').style.color=pct>=70?'var(--emerald)':pct>=50?'var(--amber)':'var(--rose)';
+  setTimeout(()=>{
+    const off=339-(pct/100*339);
+    const ring=document.getElementById('ringFill');
+    ring.style.transition='stroke-dashoffset 1.2s ease';
+    ring.style.strokeDashoffset=off;
+  },100);
+  saveRec({name:user.name,mode,score10:parseFloat(s10),ok,wrong:no,skip:sk,total,pct,time:secs,ts:new Date().toLocaleString('vi-VN')});
+  refreshUser();
+  document.getElementById('revCnt').textContent='('+total+' câu)';
+  if(mode==='repeat'){
+    document.getElementById('revList').innerHTML=`<div style="padding:22px;text-align:center;color:var(--muted);font-size:13px">✅ Bạn đã ôn lại tất cả ${total} câu — các câu sai được lặp lại tự động!</div>`;
+  } else {
+    document.getElementById('revList').innerHTML=S.qs.map((q,i)=>{
+      const a=S.ans[i]||{};
+      const cls=a.skip?'sk':a.chose===q.correct?'ok':'no';
+      const ic=a.skip?'⏭':a.chose===q.correct?'✅':'❌';
+      const qt=q.q.replace(/<[^>]+>/g,'');
+      return`<div class="rev-item ${cls}">
+        <div class="rev-q">${ic} ${qt}</div>
+        <div class="rev-row r-ok"><span class="rev-tag rt-ok">✓ Đúng</span><span class="rev-ans">${q.correct}</span></div>
+        ${a.chose!==q.correct?`<div class="rev-row ${a.skip?'r-sk':'r-no'}"><span class="rev-tag ${a.skip?'rt-sk':'rt-no'}">${a.skip?'⏭ Bỏ qua':'✗ Bạn chọn'}</span><span class="rev-ans dim">${a.chose||'(không trả lời)'}</span></div>`:''}
+      </div>`;
+    }).join('');
+  }
+  show('sResult');
+}
+function retryQuiz(){ go(); }
+
+// ════════════════════════════════════════
+//  INIT
+// ════════════════════════════════════════
+initTopics();
+const saved=getSaved();
+if(saved) enterApp(saved);
+document.getElementById('loginName').addEventListener('keydown',e=>{ if(e.key==='Enter') doLogin(); });
+</script>
+</body>
+</html>
